@@ -10,7 +10,7 @@ import XCTest
 import SwiftUI
 @testable import SparkTag
 @_spi(SI_SPI) @testable import SparkTagTesting
-import SparkThemingTesting
+@_spi(SI_SPI) import SparkThemingTesting
 
 final class TagGetColorsUseCaseTests: XCTestCase {
 
