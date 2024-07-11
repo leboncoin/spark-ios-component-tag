@@ -169,6 +169,28 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
         )
     }
 
+    func test_execute_intent_surface() {
+        // GIVEN
+        let intent = TagIntent.surface
+        let useCase = TagGetContentColorsUseCase()
+        let colors = ColorsGeneratedMock.mocked()
+
+        // WHEN
+        let sut = useCase.execute(intent: intent,
+                                  colors: colors)
+
+        // THEN
+        XCTAssertEqual(
+            sut,
+            .init(
+                color: colors.base.surface,
+                onColor: colors.base.onSurface,
+                containerColor: colors.base.surface,
+                onContainerColor: colors.base.onSurface
+            )
+        )
+    }
+
     func test_execute_intent_accent() {
         // GIVEN
         let intent = TagIntent.accent
