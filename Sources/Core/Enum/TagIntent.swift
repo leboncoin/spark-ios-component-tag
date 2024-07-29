@@ -15,6 +15,7 @@ public enum TagIntent: CaseIterable {
     case main
     case support
     case success
+    case surface
     case accent
     case basic
 }
