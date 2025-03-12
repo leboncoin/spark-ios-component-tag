@@ -3,7 +3,7 @@
 //  SparkTag
 //
 //  Created by robin.lemaire on 27/03/2023.
-//  Copyright © 2023 Adevinta. All rights reserved.
+//  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
 /// The intent of the tag.
