@@ -1,139 +1,67 @@
 # Tag
-Tags are used to label content and help users quickly recognize info about them: Categories, Status... Can be applied with different colors and designs that are associated with a content due to its characteristics: new content, unvisited content, featured content... Users can’t interact with Tags.
+
+**Spark** is the [Leboncoin](https://www.leboncoin.fr/)'s _Design System_.
+
+The repository here contains only the **iOS Tag** for _SwiftUI_ and _UIKit_.
+
+You can also see all of our Spark iOS repositories on [Github](https://github.com/orgs/leboncoin/repositories?q=spark-ios+sort%3Aname-asc).
 
 ## Specifications
+
 The tag specifications on Zeroheight is [here](https://spark.adevinta.com/1186e1705/p/295e88-tag).
 
-![Figma anatomy](https://github.com/adevinta/spark-ios-component-tag/blob/main/.github/assets/anatomy.png)
+![Figma anatomy](https://github.com/leboncoin/spark-ios-component-tag/blob/main/.github/assets/anatomy.png)
 
-## Usage
-Tag is available both in UIKit and SwiftUI. 
+## Technical Documentation
 
-### TagUIView
-Parameters:
-* `theme`: The current Spark-Theme. [You can always define your own theme.](https://github.com/adevinta/spark-ios/wiki/Theming#your-own-theming)
-* `intent`: The intent of the tag, e.g. main, support
-* `variant`: The tag variant, e.g. `outlined`, `filled`, `tinted`.
-* `iconImage`: An icon used in tag.
-* `text`: The text of the tag.
-* `attributedText`: The attributed text of the tag.
+You are a developer ? A technical documentation in _DocC_ is available [here](https://leboncoin.github.io/spark-ios-component-tag/).
 
-**Note**: you can use Tag with text and/or icon. But one of these properties is a must have!
+### Swift Package Manager
 
-### TagView
-Parameters:
-* `theme`: The current Spark-Theme. [You can always define your own theme.](https://github.com/adevinta/spark-ios/wiki/Theming#your-own-theming)
+_Note: Instructions below are for using **SPM** without the Xcode UI. It's the easiest to go to your Project Settings -> Swift Packages and add SparkTag from there._
 
-Default values:
-* `intent`: `.main`.
-* `variant`: `.filled`.
-* `iconImage`: `nil`.
-* `text`: `nil`.
-* `attributedText`: `nil`.
-
-Modifiers:
-* `.intent(TagIntent) -> Self`.
-* `.variant(TagVariant) -> Self`.
-* `.text(String?) -> Self`.
-* `.attributedText(_ attributedText: AttributedString?) -> Self`.
-* `.iconImage(Image?) -> Self`.
-* `.accessibility(String, String? = nil) -> some View`: first parameter is the accessibility identifier. Second -- is the label identifier. If value is nil and text is set, the label identifier will be the text value. Returns current Tag view.
-
-**Note**: You must use the Modifier to add at least iconImage or/and text.
-
-## Examples
-### TagUIView
+To integrate using Apple's Swift package manager, without Xcode integration, add the following as a dependency to your `Package.swift`:
 
 ```swift
-let iconImage = UIImage(named: "tag_image") ?? UIImage()
-
-// Tag with both icon and text
-let fullTagView = TagUIView(
-    theme: self.theme,
-    intent: .alert,
-    variant: .tinted,
-    iconImage: iconImage,
-    text: "Tag with text"
-)
-
-// Tag with both icon and attributedText
-let fullTagView = TagUIView(
-    theme: self.theme,
-    intent: .alert,
-    variant: .tinted,
-    iconImage: iconImage,
-    attributedText: NSAttributedString(string: "Tag with text")
-)
-
-// Tag with icon only
-let iconTagView = TagUIView(
-    theme: self.theme,
-    intent: .danger,
-    variant: .filled,
-    iconImage: iconImage
-)
-
-// Tag with text only
-let textTagView = TagUIView(
-    theme: self.theme,
-    intent: .info,
-    variant: .outlined,
-    text: "Tag with text only"
-)
-
-// Tag with attributedText only
-let textTagView = TagUIView(
-    theme: self.theme,
-    intent: .info,
-    variant: .outlined,
-    attributedText: NSAttributedString(string: "Tag with text only")
-)
+.package(url: "https://github.com/leboncoin/spark-ios-component-tag.git", .upToNextMajor(from: "1.0.0"))
 ```
 
-### TagView
+and then specify `SparkTag` as a dependency of the Target in which you wish to use the SparkTag.
+
+Here's an example `Package.swift`:
 
 ```swift
-// Tag with both icon and text
-TagView(theme: self.theme)
-    .intent(.neutral)
-    .variant(.tinted)
-    .iconImage(Image("checkbox"))
-    .text("Tag with text only")
-    .accessibility(identifier: "MyTag0",
-                   label: "It's my first tag")
+// swift-tools-version:5.9
+import PackageDescription
 
-// Tag with both icon and attributedText
-TagView(theme: self.theme)
-    .intent(.neutral)
-    .variant(.tinted)
-    .iconImage(Image("checkbox"))
-    .attributedText(AttributedString"Tag with text"))
-    .accessibility(identifier: "MyTag0",
-                   label: "It's my first tag")
-
-// Tag with icon only
-TagView(theme: self.theme)
-    .intent(.support)
-    .variant(.filled)
-    .iconImage(Image("checkbox"))
-    .accessibility(identifier: "MyTag1",
-                   label: "It's my second tag")
-
-// Tag with text only
-TagView(theme: self.theme)
-    .intent(.success)
-    .variant(.outlined)
-    .text("It's my third tag")
-    .accessibility(identifier: "MyTag2",
-                   label: nil)
-
-// Tag with text only
-TagView(theme: self.theme)
-    .intent(.success)
-    .variant(.outlined)
-    .attributedText(AttributedString"Tag with text"))
-    .accessibility(identifier: "MyTag2",
-                   label: nil)
+let package = Package(
+    name: "MyPackage",
+    platforms: [
+        .iOS(.v16)
+    ],
+    products: [
+        .library(
+            name: "MyPackage",
+            targets: ["MyPackage"]),
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/leboncoin/spark-ios-component-tag.git",
+            .upToNextMajor(from: "1.0.0")
+        )
+    ],
+    targets: [
+        .target(
+            name: "MyPackage",
+            dependencies: [
+                .product(
+                    name: "SparkTag",
+                    package: "spark-ios-component-tag"
+                ),
+            ]
+        )
+    ]
+)
 ```
 
 ## License
@@ -141,7 +69,7 @@ TagView(theme: self.theme)
 ```
 MIT License
 
-Copyright (c) 2024 Adevinta
+Copyright (c) 2024 Leboncoin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
