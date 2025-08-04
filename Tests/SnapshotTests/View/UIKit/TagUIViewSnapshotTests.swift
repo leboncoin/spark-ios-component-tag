@@ -1,6 +1,6 @@
 //
 //  TagUIViewSnapshotTests.swift
-//  SparkTagTests
+//  SparkComponentTagTests
 //
 //  Created by robin.lemaire on 04/05/2023.
 //  Copyright © 2023 Leboncoin. All rights reserved.
@@ -8,7 +8,7 @@
 
 import XCTest
 import SnapshotTesting
-@testable import SparkTag
+@testable import SparkComponentTag
 @_spi(SI_SPI) import SparkCommon
 @_spi(SI_SPI) import SparkCommonSnapshotTesting
 import SparkTheming

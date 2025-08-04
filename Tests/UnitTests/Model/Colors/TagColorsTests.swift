@@ -1,13 +1,13 @@
 //
 //  TagColorsTests.swift
-//  SparkTagTests
+//  SparkComponentTagTests
 //
 //  Created by michael.zimmermann on 24.07.23.
 //  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
 import XCTest
-@testable import SparkTag
+@testable import SparkComponentTag
 import SparkTheme
 
 final class TagColorsTests: XCTestCase {

@@ -5,18 +5,18 @@ import PackageDescription
 
 // swiftlint:disable all
 let package = Package(
-    name: "SparkTag",
+    name: "SparkComponentTag",
     platforms: [
         .iOS(.v16)
     ],
     products: [
         .library(
-            name: "SparkTag",
-            targets: ["SparkTag"]
+            name: "SparkComponentTag",
+            targets: ["SparkComponentTag"]
         ),
         .library(
-            name: "SparkTagTesting",
-            targets: ["SparkTagTesting"]
+            name: "SparkComponentTagTesting",
+            targets: ["SparkComponentTagTesting"]
         )
     ],
     dependencies: [
@@ -33,7 +33,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SparkTag",
+            name: "SparkComponentTag",
             dependencies: [
                 .product(
                     name: "SparkCommon",
@@ -47,9 +47,9 @@ let package = Package(
             path: "Sources/Core"
         ),
         .target(
-            name: "SparkTagTesting",
+            name: "SparkComponentTagTesting",
             dependencies: [
-                "SparkTag",
+                "SparkComponentTag",
                 .product(
                     name: "SparkCommon",
                     package: "spark-ios-common"
@@ -70,10 +70,10 @@ let package = Package(
             path: "Sources/Testing"
         ),
         .testTarget(
-            name: "SparkTagUnitTests",
+            name: "SparkComponentTagUnitTests",
             dependencies: [
-                "SparkTag",
-                "SparkTagTesting",
+                "SparkComponentTag",
+                "SparkComponentTagTesting",
                 .product(
                     name: "SparkCommonTesting",
                     package: "spark-ios-common"
@@ -86,10 +86,10 @@ let package = Package(
             path: "Tests/UnitTests"
         ),
         .testTarget(
-            name: "SparkTagSnapshotTests",
+            name: "SparkComponentTagSnapshotTests",
             dependencies: [
-                "SparkTag",
-                "SparkTagTesting",
+                "SparkComponentTag",
+                "SparkComponentTagTesting",
                 .product(
                     name: "SparkCommonSnapshotTesting",
                     package: "spark-ios-common"
