@@ -1,13 +1,13 @@
 //
 //  TagConfigurationSnapshotTests.swift
-//  SparkTagTests
+//  SparkComponentTagTests
 //
 //  Created by robin.lemaire on 05/05/2023.
 //  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
 import UIKit
-@testable import SparkTag
+@testable import SparkComponentTag
 @_spi(SI_SPI) import SparkCommon
 @_spi(SI_SPI) import SparkCommonSnapshotTesting
 @_spi(SI_SPI) import SparkCommonTesting
