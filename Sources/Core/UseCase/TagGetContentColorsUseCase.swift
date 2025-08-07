@@ -10,16 +10,21 @@ import SparkTheming
 
 // sourcery: AutoMockable
 protocol TagGetContentColorsUseCaseable {
-    func execute(intent: TagIntent,
-                 colors: Colors) -> TagContentColors
+    // sourcery: theme = "Identical"
+    func execute(
+        intent: TagIntent,
+        colors: Colors
+    ) -> TagContentColors
 }
 
 struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(intent: TagIntent,
-                 colors: Colors) -> TagContentColors {
+    func execute(
+        intent: TagIntent,
+        colors: Colors
+    ) -> TagContentColors {
 
         switch intent {
         case .alert:

@@ -6,15 +6,15 @@
 //  Copyright © 2023 Leboncoin. All rights reserved.
 //
 
-import SparkTheming
+@_spi(SI_SPI) import SparkTheming
 
 struct TagColors {
 
     // MARK: - Properties
 
-    let backgroundColor: any ColorToken
-    let borderColor: any ColorToken
-    let foregroundColor: any ColorToken
+    var backgroundColor: any ColorToken = ColorTokenClear()
+    var borderColor: any ColorToken = ColorTokenClear()
+    var foregroundColor: any ColorToken = ColorTokenClear()
 }
 
 // MARK: Hashable & Equatable

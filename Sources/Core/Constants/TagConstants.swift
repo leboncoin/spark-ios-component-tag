@@ -9,5 +9,8 @@
 import Foundation
 
 enum TagConstants {
+    @available(*, deprecated, message: "Replaced by TagSize.")
     static let height: CGFloat = 20
+
+    static let iconSize: CGFloat = 12
 }

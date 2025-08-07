@@ -8,11 +8,14 @@
 
 import SparkTheming
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, AutoMockTest
 protocol TagGetColorsUseCaseable {
-    func execute(theme: Theme,
-                 intent: TagIntent,
-                 variant: TagVariant) -> TagColors
+    // sourcery: theme = "Identical"
+    func execute(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant
+    ) -> TagColors
 }
 
 struct TagGetColorsUseCase: TagGetColorsUseCaseable {
@@ -29,9 +32,11 @@ struct TagGetColorsUseCase: TagGetColorsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(theme: Theme,
-                 intent: TagIntent,
-                 variant: TagVariant) -> TagColors {
+    func execute(
+        theme: Theme,
+        intent: TagIntent,
+        variant: TagVariant
+    ) -> TagColors {
         let contentColors = self.getContentColorsUseCase.execute(
             intent: intent,
             colors: theme.colors

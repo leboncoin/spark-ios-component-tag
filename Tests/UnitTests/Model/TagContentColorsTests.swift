@@ -2,8 +2,8 @@
 //  TagContentColorsTests.swift
 //  SparkComponentTagTests
 //
-//  Created by michael.zimmermann on 24.07.23.
-//  Copyright © 2023 Leboncoin. All rights reserved.
+//  Created by robin.lemaire on 06/08/2025.
+//  Copyright © 2025 Leboncoin. All rights reserved.
 //
 
 import XCTest
@@ -12,7 +12,10 @@ import SparkTheme
 
 final class TagContentColorsTests: XCTestCase {
 
-    func testEqual() {
+    // MARK: - Tests
+
+    func test_equal() {
+        // GIVEN / WHEN
         let colors = SparkTheme.shared.colors
 
         let colors1 = TagContentColors(
@@ -27,10 +30,12 @@ final class TagContentColorsTests: XCTestCase {
             containerColor: colors.base.background,
             onContainerColor: colors.base.onBackground)
 
+        // THEN
         XCTAssertEqual(colors1, colors2)
     }
 
-    func testNotEqual() {
+    func test_not_equal() {
+        // GIVEN / WHEN
         let colors = SparkTheme.shared.colors
 
         let colors1 = TagContentColors(
@@ -45,6 +50,7 @@ final class TagContentColorsTests: XCTestCase {
             containerColor: colors.base.background,
             onContainerColor: colors.base.onBackground)
 
+        // THEN
         XCTAssertNotEqual(colors1, colors2)
     }
 }
