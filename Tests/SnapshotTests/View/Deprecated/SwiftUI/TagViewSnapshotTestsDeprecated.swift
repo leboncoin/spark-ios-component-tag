@@ -1,5 +1,5 @@
 //
-//  TagViewSnapshotTests.swift
+//  TagViewSnapshotTestsDeprecated.swift
 //  SparkComponentTagTests
 //
 //  Created by robin.lemaire on 04/05/2023.
@@ -15,7 +15,7 @@ import SparkTheme
 @_spi(SI_SPI) import SparkCommon
 @_spi(SI_SPI) import SparkCommonSnapshotTesting
 
-final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
+final class TagViewSnapshotTestsDeprecated: SwiftUIComponentSnapshotTestCase {
 
     // MARK: - Properties
 
@@ -24,7 +24,7 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
     // MARK: - Tests
 
     func test() {
-        let scenarios = TagScenarioSnapshotTests.allCases
+        let scenarios = TagScenarioSnapshotTestsDeprecated.allCases
 
         for scenario in scenarios {
             let configurations = scenario.configuration(isSwiftUIComponent: true)
@@ -54,7 +54,7 @@ final class TagViewSnapshotTests: SwiftUIComponentSnapshotTestCase {
 private extension TagView {
 
     @ViewBuilder
-    func content(_ configuration: TagConfigurationSnapshotTests) -> some View {
+    func content(_ configuration: TagConfigurationSnapshotTestsDeprecated) -> some View {
         switch configuration.content {
         case .text(let text), .longText(let text):
             self.text(text)
