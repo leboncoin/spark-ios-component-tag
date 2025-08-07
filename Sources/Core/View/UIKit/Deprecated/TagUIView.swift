@@ -11,6 +11,7 @@ import UIKit
 import SparkTheming
 
 /// The UIKit version for the tag.
+@available(*, deprecated, message: "Use SparkUITag instead !")
 public final class TagUIView: UIView {
 
     // MARK: - Type alias

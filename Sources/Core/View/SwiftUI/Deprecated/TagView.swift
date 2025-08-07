@@ -11,6 +11,7 @@ import SwiftUI
 import SparkTheming
 
 /// The SwiftUI version for the tag
+@available(*, deprecated, message: "Use SparkTag instead !")
 public struct TagView: View {
 
     // MARK: - Type Alias
@@ -19,7 +20,7 @@ public struct TagView: View {
 
     // MARK: - Private Properties
 
-    @ObservedObject private var viewModel: TagViewModel
+    @ObservedObject private var viewModel: TagViewModelDeprecated
     @ScaledMetric private var height: CGFloat = TagConstants.height
     @ScaledMetric private var smallSpacing: CGFloat
     @ScaledMetric private var mediumSpacing: CGFloat
@@ -38,7 +39,7 @@ public struct TagView: View {
         intent: TagIntent,
         variant: TagVariant
     ) {
-        let viewModel = TagViewModel(
+        let viewModel = TagViewModelDeprecated(
             theme: theme,
             intent: intent,
             variant: variant

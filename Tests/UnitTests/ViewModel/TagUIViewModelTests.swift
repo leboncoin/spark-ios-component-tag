@@ -1,5 +1,5 @@
 //
-//  TagViewModelTests.swift
+//  TagUIViewModelTests.swift
 //  SparkComponentTagTests
 //
 //  Created by robin.lemaire on 07/08/2025.
@@ -14,7 +14,7 @@ import SparkTheming
 @_spi(SI_SPI) import SparkThemingTesting
 import SwiftUI
 
-final class TagViewModelTests: XCTestCase {
+final class TagUIViewModelTests: XCTestCase {
 
     // MARK: - Initialization Test
 
@@ -28,8 +28,8 @@ final class TagViewModelTests: XCTestCase {
             otherBorder: .init(),
             otherColors: .init(),
             otherSpacings: .init(),
-            otherHeight: true,
-            otherTextFont: .body
+            otherHeight: 0,
+            otherTextFont: .systemFont(ofSize: 14)
         )
 
         // UseCase Calls Count
@@ -43,15 +43,15 @@ final class TagViewModelTests: XCTestCase {
         )
     }
 
-    // MARK: - Setup Tests
+    // MARK: - Load Tests
 
-    func test_setup_shouldCallAllUseCases() {
+    func test_load_shouldCallAllUseCases() {
         // GIVEN
         let stub = Stub()
         let viewModel = stub.viewModel
 
         // WHEN
-        viewModel.setup(stub: stub)
+        viewModel.load()
 
         // THEN
         XCTAssertEqualToExpected(on: stub)
@@ -62,8 +62,8 @@ final class TagViewModelTests: XCTestCase {
             stub.getBorderUseCaseMock,
             expectedNumberOfCalls: 1,
             givenTheme: stub.givenTheme,
-            givenSize: stub.givenSize,
-            givenVariant: stub.givenVariant,
+            givenSize: .default,
+            givenVariant: .default,
             expectedReturnValue: stub.expectedBorder
         )
 
@@ -71,15 +71,15 @@ final class TagViewModelTests: XCTestCase {
             stub.getColorsUseCaseMock,
             expectedNumberOfCalls: 1,
             givenTheme: stub.givenTheme,
-            givenIntent: stub.givenIntent,
-            givenVariant: stub.givenVariant,
+            givenIntent: .default,
+            givenVariant: .default,
             expectedReturnValue: stub.expectedColors
         )
 
         TagGetHeightUseCaseableMockTest.XCTAssert(
             stub.getHeightUseCaseMock,
             expectedNumberOfCalls: 1,
-            givenSize: stub.givenSize,
+            givenSize: .default,
             expectedReturnValue: stub.expectedHeight
         )
 
@@ -106,7 +106,7 @@ final class TagViewModelTests: XCTestCase {
         let stub = Stub()
         let viewModel = stub.viewModel
 
-        viewModel.setup(stub: stub)
+        viewModel.load()
         stub.resetMockedData()
 
         let givenTheme = ThemeGeneratedMock.mocked()
@@ -128,8 +128,8 @@ final class TagViewModelTests: XCTestCase {
             stub.getBorderUseCaseMock,
             expectedNumberOfCalls: 1,
             givenTheme: givenTheme,
-            givenSize: stub.givenSize,
-            givenVariant: stub.givenVariant,
+            givenSize: .default,
+            givenVariant: .default,
             expectedReturnValue: stub.expectedBorder
         )
 
@@ -137,8 +137,8 @@ final class TagViewModelTests: XCTestCase {
             stub.getColorsUseCaseMock,
             expectedNumberOfCalls: 1,
             givenTheme: givenTheme,
-            givenIntent: stub.givenIntent,
-            givenVariant: stub.givenVariant,
+            givenIntent: .default,
+            givenVariant: .default,
             expectedReturnValue: stub.expectedColors
         )
 
@@ -163,7 +163,7 @@ final class TagViewModelTests: XCTestCase {
         let stub = Stub()
         let viewModel = stub.viewModel
 
-        viewModel.setup(stub: stub)
+        viewModel.load()
         stub.resetMockedData()
 
         let givenIntent = TagIntent.success
@@ -189,7 +189,7 @@ final class TagViewModelTests: XCTestCase {
             expectedNumberOfCalls: 1,
             givenTheme: stub.givenTheme,
             givenIntent: givenIntent,
-            givenVariant: stub.givenVariant,
+            givenVariant: .default,
             expectedReturnValue: stub.expectedColors
         )
         // **
@@ -200,10 +200,10 @@ final class TagViewModelTests: XCTestCase {
         let stub = Stub()
         let viewModel = stub.viewModel
 
-        viewModel.setup(stub: stub)
+        viewModel.load()
         stub.resetMockedData()
 
-        let givenSize = TagSize.medium
+        let givenSize = TagSize.large
 
         // WHEN
         viewModel.size = givenSize
@@ -225,7 +225,7 @@ final class TagViewModelTests: XCTestCase {
             expectedNumberOfCalls: 1,
             givenTheme: stub.givenTheme,
             givenSize: givenSize,
-            givenVariant: stub.givenVariant,
+            givenVariant: .default,
             expectedReturnValue: stub.expectedBorder
         )
 
@@ -243,7 +243,7 @@ final class TagViewModelTests: XCTestCase {
         let stub = Stub()
         let viewModel = stub.viewModel
 
-        viewModel.setup(stub: stub)
+        viewModel.load()
         stub.resetMockedData()
 
         let givenVariant = TagVariant.outlined
@@ -267,7 +267,7 @@ final class TagViewModelTests: XCTestCase {
             stub.getBorderUseCaseMock,
             expectedNumberOfCalls: 1,
             givenTheme: stub.givenTheme,
-            givenSize: stub.givenSize,
+            givenSize: .default,
             givenVariant: givenVariant,
             expectedReturnValue: stub.expectedBorder
         )
@@ -276,7 +276,7 @@ final class TagViewModelTests: XCTestCase {
             stub.getColorsUseCaseMock,
             expectedNumberOfCalls: 1,
             givenTheme: stub.givenTheme,
-            givenIntent: stub.givenIntent,
+            givenIntent: .default,
             givenVariant: givenVariant,
             expectedReturnValue: stub.expectedColors
         )
@@ -288,13 +288,13 @@ final class TagViewModelTests: XCTestCase {
         let stub = Stub()
         let viewModel = stub.viewModel
 
-        viewModel.setup(stub: stub)
+        viewModel.load()
         stub.resetMockedData()
 
         // WHEN
-        viewModel.intent = stub.givenIntent
-        viewModel.size = stub.givenSize
-        viewModel.variant = stub.givenVariant
+        viewModel.intent = .default
+        viewModel.size = .default
+        viewModel.variant = .default
 
         // THEN
         XCTAssertEqualToExpected(on: stub)
@@ -310,7 +310,7 @@ final class TagViewModelTests: XCTestCase {
         )
     }
 
-    func test_allSetter_exceptTheme_withoutSetupBefore() {
+    func test_allSetter_exceptTheme_withoutLoadBefore() {
         // GIVEN
         let stub = Stub()
         let viewModel = stub.viewModel
@@ -326,8 +326,8 @@ final class TagViewModelTests: XCTestCase {
             otherBorder: .init(),
             otherColors: .init(),
             otherSpacings: .init(),
-            otherHeight: true,
-            otherTextFont: .body
+            otherHeight: 0,
+            otherTextFont: .systemFont(ofSize: 14)
         )
 
         // UseCase Calls Count
@@ -344,7 +344,7 @@ final class TagViewModelTests: XCTestCase {
 
 // MARK: - Stub
 
-private final class Stub: TagViewModelStub {
+private final class Stub: TagUIViewModelStub {
 
     // MARK: - Given Properties
 
@@ -359,7 +359,7 @@ private final class Stub: TagViewModelStub {
     let expectedColors = TagColors()
     let expectedSpacings = TagSpacings()
     let expectedHeight: CGFloat = 10
-    let expectedTextFont: Font = .subheadline
+    let expectedTextFont: UIFont = .italicSystemFont(ofSize: 10)
 
     // MARK: - Initialization
 
@@ -377,9 +377,10 @@ private final class Stub: TagViewModelStub {
         getSpacingsUseCaseMock.executeWithThemeReturnValue = self.expectedSpacings
 
         let getTextFontUseCaseMock = TagGetTextFontUseCaseableGeneratedMock()
-        getTextFontUseCaseMock.executeWithThemeReturnValue = self.expectedTextFont
+        getTextFontUseCaseMock.executeUIWithThemeReturnValue = self.expectedTextFont
 
-        let viewModel = TagViewModel(
+        let viewModel = TagUIViewModel(
+            theme: self.givenTheme,
             getBorderUseCase: getBorderUseCaseMock,
             getColorsUseCase: getColorsUseCaseMock,
             getHeightUseCase: getHeightUseCaseMock,
@@ -394,20 +395,6 @@ private final class Stub: TagViewModelStub {
             getHeightUseCaseMock: getHeightUseCaseMock,
             getSpacingsUseCaseMock: getSpacingsUseCaseMock,
             getTextFontUseCaseMock: getTextFontUseCaseMock
-        )
-    }
-}
-
-// MARK: - Extension
-
-private extension TagViewModel {
-
-    func setup(stub: Stub) {
-        self.setup(
-            theme: stub.givenTheme,
-            intent: stub.givenIntent,
-            size: stub.givenSize,
-            variant: stub.givenVariant
         )
     }
 }
@@ -463,8 +450,8 @@ private func XCTAssertEqualToExpected(
     otherBorder: TagBorder? = nil,
     otherColors: TagColors? = nil,
     otherSpacings: TagSpacings? = nil,
-    otherHeight: Bool = false,
-    otherTextFont: Font? = nil
+    otherHeight: CGFloat? = nil,
+    otherTextFont: UIFont? = nil
 ) {
     let viewModel = stub.viewModel
 
@@ -485,7 +472,7 @@ private func XCTAssertEqualToExpected(
     )
     XCTAssertEqual(
         viewModel.height,
-        otherHeight ? nil : stub.expectedHeight,
+        otherHeight ?? stub.expectedHeight,
         "Wrong height value"
     )
     XCTAssertEqual(

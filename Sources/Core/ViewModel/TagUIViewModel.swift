@@ -1,6 +1,6 @@
 //
-//  TagViewModel.swift
-//  SparkComponentTag
+//  TagUIViewModel.swift
+//  SparkComponentSelectionControls
 //
 //  Created by robin.lemaire on 05/08/2025.
 //  Copyright © 2025 Leboncoin. All rights reserved.
@@ -12,21 +12,21 @@ import SparkTheming
 
 /// ViewModel only used by **SwiftUI** View.
 // sourcery: AutoPublisherTest, AutoViewModelStub
-final internal class TagViewModel: ObservableObject {
+final internal class TagUIViewModel: ObservableObject {
 
     // MARK: - Published Properties
 
     @Published private(set) var border = TagBorder()
     @Published private(set) var colors = TagColors()
     @Published private(set) var spacings = TagSpacings()
-    @Published private(set) var height: CGFloat?
-    @Published private(set) var textFont: Font = .body
+    @Published private(set) var height: CGFloat = 0
+    @Published private(set) var textFont: UIFont = .systemFont(ofSize: 14)
 
     // MARK: - Properties
 
     private var alreadyUpdateAll = false
 
-    var theme: (any Theme)? {
+    var theme: any Theme {
         didSet {
             guard self.alreadyUpdateAll else { return }
 
@@ -37,7 +37,7 @@ final internal class TagViewModel: ObservableObject {
         }
     }
 
-    var intent: TagIntent? {
+    var intent: TagIntent = .default {
         didSet {
             guard oldValue != self.intent, self.alreadyUpdateAll else { return }
 
@@ -45,7 +45,7 @@ final internal class TagViewModel: ObservableObject {
         }
     }
 
-    var size: TagSize? {
+    var size: TagSize = .default {
         didSet {
             guard oldValue != self.size, self.alreadyUpdateAll else { return }
 
@@ -54,7 +54,7 @@ final internal class TagViewModel: ObservableObject {
         }
     }
 
-    var variant: TagVariant? {
+    var variant: TagVariant = .default {
         didSet {
             guard oldValue != self.variant, self.alreadyUpdateAll else { return }
 
@@ -74,12 +74,15 @@ final internal class TagViewModel: ObservableObject {
     // MARK: - Initialization
 
     init(
+        theme: any Theme,
         getBorderUseCase: TagGetBorderUseCaseable = TagGetBorderUseCase(),
         getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase(),
         getHeightUseCase: TagGetHeightUseCaseable = TagGetHeightUseCase(),
         getSpacingsUseCase: TagGetSpacingsUseCaseable = TagGetSpacingsUseCase(),
         getTextFontUseCase: TagGetTextFontUseCaseable = TagGetTextFontUseCase()
     ) {
+        self.theme = theme
+
         self.getBorderUseCase = getBorderUseCase
         self.getColorsUseCase = getColorsUseCase
         self.getHeightUseCase = getHeightUseCase
@@ -87,19 +90,9 @@ final internal class TagViewModel: ObservableObject {
         self.getTextFontUseCase = getTextFontUseCase
     }
 
-    // MARK: - Setup
+    // MARK: - Load
 
-    func setup(
-        theme: Theme,
-        intent: TagIntent,
-        size: TagSize,
-        variant: TagVariant
-    ) {
-        self.theme = theme
-        self.intent = intent
-        self.size = size
-        self.variant = variant
-
+    func load() {
         self.setBorder()
         self.setColors()
         self.setSpacings()
@@ -112,50 +105,30 @@ final internal class TagViewModel: ObservableObject {
     // MARK: - Private Setter
 
     private func setBorder() {
-        guard let theme, let size, let variant else {
-            return
-        }
-
         self.border = self.getBorderUseCase.execute(
-            theme: theme,
-            size: size,
-            variant: variant
+            theme: self.theme,
+            size: self.size,
+            variant: self.variant
         )
     }
 
     private func setColors() {
-        guard let theme, let intent, let variant else {
-            return
-        }
-
         self.colors = self.getColorsUseCase.execute(
-            theme: theme,
-            intent: intent,
-            variant: variant
+            theme: self.theme,
+            intent: self.intent,
+            variant: self.variant
         )
     }
 
     private func setSpacings() {
-        guard let theme else {
-            return
-        }
-
-        self.spacings = self.getSpacingsUseCase.execute(theme: theme)
+        self.spacings = self.getSpacingsUseCase.execute(theme: self.theme)
     }
 
     private func setHeight() {
-        guard let size else {
-            return
-        }
-
-        self.height = self.getHeightUseCase.execute(size: size)
+        self.height = self.getHeightUseCase.execute(size: self.size)
     }
 
     private func setTextFont() {
-        guard let theme else {
-            return
-        }
-
-        self.textFont = self.getTextFontUseCase.execute(theme: theme)
+        self.textFont = self.getTextFontUseCase.executeUI(theme: self.theme)
     }
 }
