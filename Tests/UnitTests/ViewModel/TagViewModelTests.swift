@@ -1,281 +1,496 @@
 //
 //  TagViewModelTests.swift
-//  SparkTagTests
+//  SparkComponentTagTests
 //
-//  Created by robin.lemaire on 27/04/2023.
-//  Copyright © 2023 Leboncoin. All rights reserved.
+//  Created by robin.lemaire on 07/08/2025.
+//  Copyright © 2025 Leboncoin. All rights reserved.
 //
 
 import XCTest
-import SwiftUI
-@testable import SparkTag
-@_spi(SI_SPI) @testable import SparkTagTesting
+@testable import SparkComponentTag
+@_spi(SI_SPI) @testable import SparkComponentTagTesting
+@_spi(SI_SPI) import SparkCommon
+import SparkTheming
 @_spi(SI_SPI) import SparkThemingTesting
+import SwiftUI
 
 final class TagViewModelTests: XCTestCase {
 
-    // MARK: - Properties
+    // MARK: - Initialization Test
 
-    private let themeTypographyMock = TypographyGeneratedMock()
-    private let themeBorderMock = BorderGeneratedMock()
-    private let themeSpacingMock = LayoutSpacingGeneratedMock()
-    private lazy var themeLayoutMock: LayoutGeneratedMock = {
-        let mock = LayoutGeneratedMock()
-        mock.underlyingSpacing = self.themeSpacingMock
-        return mock
-    }()
-    private lazy var themeMock: ThemeGeneratedMock = {
-        let mock = ThemeGeneratedMock()
-        mock.underlyingTypography = self.themeTypographyMock
-        mock.underlyingBorder = self.themeBorderMock
-        mock.underlyingLayout = self.themeLayoutMock
-        return mock
-    }()
-
-    private let tagColorsMock = TagColors.mocked()
-    private lazy var getColorsUseCaseMock: TagGetColorsUseCaseableGeneratedMock = {
-        let mock = TagGetColorsUseCaseableGeneratedMock()
-        mock.executeWithThemeAndIntentAndVariantReturnValue = self.tagColorsMock
-        return mock
-    }()
-
-    // MARK: - Properties Tests
-
-    func test_default_properties() {
+    func test_initialization_shouldUseDefaultValues() {
         // GIVEN / WHEN
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            getColorsUseCase: self.getColorsUseCaseMock
-        )
+        let stub = Stub()
 
         // THEN
-        self.testProperties(
-            on: viewModel,
-            expectedIntent: .main,
-            expectedVariant: .filled,
-            expectedIconImage: nil,
-            expectedText: nil,
-            expectedAttributedText: nil
+        XCTAssertEqualToExpected(
+            on: stub,
+            otherBorder: .init(),
+            otherColors: .init(),
+            otherSpacings: .init(),
+            otherHeight: true,
+            otherTextFont: .body
+        )
+
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getBorder: true,
+            getColors: true,
+            getHeight: true,
+            getSpacings: true,
+            getTextFont: true
         )
     }
 
-    func test_properties() {
-        // GIVEN / WHEN
-        let intentMock: TagIntent = .alert
-        let variantMock: TagVariant = .outlined
-        let iconImageMock = Image(systemName: "square.and.arrow.up")
-        let textMock = "Text"
-        let attributedTextMock = AttributedString("AT Text")
+    // MARK: - Setup Tests
 
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            intent: intentMock,
-            variant: variantMock,
-            iconImage: iconImageMock,
-            text: textMock,
-            attributedText: attributedTextMock,
-            getColorsUseCase: self.getColorsUseCaseMock
-        )
-
-        // THEN
-        self.testProperties(
-            on: viewModel,
-            expectedIntent: intentMock,
-            expectedVariant: variantMock,
-            expectedIconImage: iconImageMock,
-            expectedText: textMock,
-            expectedAttributedText: attributedTextMock
-        )
-    }
-
-    func testProperties(
-        on givenViewModel: TagViewModel,
-        expectedIntent: TagIntent,
-        expectedVariant: TagVariant,
-        expectedIconImage: Image?,
-        expectedText: String?,
-        expectedAttributedText: AttributedString?
-    ) {
-        XCTAssertEqual(givenViewModel.colors,
-                       self.tagColorsMock,
-                       "Wrong colors value")
-        XCTAssertIdentical(givenViewModel.typography as? TypographyGeneratedMock,
-                           self.themeTypographyMock,
-                           "Wrong typography value")
-        XCTAssertIdentical(givenViewModel.spacing as? LayoutSpacingGeneratedMock,
-                           self.themeSpacingMock,
-                           "Wrong spacing value")
-        XCTAssertIdentical(givenViewModel.border as? BorderGeneratedMock,
-                           self.themeBorderMock,
-                           "Wrong border value")
-        XCTAssertEqual(givenViewModel.iconImage,
-                       expectedIconImage,
-                       "Wrong iconImage value")
-        XCTAssertEqual(givenViewModel.text,
-                       expectedText,
-                       "Wrong text value")
-        XCTAssertEqual(givenViewModel.attributedText,
-                       expectedAttributedText,
-                       "Wrong attributedText value")
-
-        // **
-        // GetColorsUseCase
-        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
-                       1,
-                       "Wrong call number on execute on getColorsUseCase")
-
-        XCTAssertIdentical(getColorsUseCaseArgs?.theme as? ThemeGeneratedMock,
-                           themeMock,
-                           "Wrong theme parameter on execute on getColorsUseCase")
-        XCTAssertEqual(getColorsUseCaseArgs?.intent,
-                       expectedIntent,
-                       "Wrong intent parameter on execute on getColorsUseCase")
-        XCTAssertEqual(getColorsUseCaseArgs?.variant,
-                       expectedVariant,
-                       "Wrong variant parameter on execute on getColorsUseCase")
-        // **
-    }
-
-    // MARK: - Public Setter Tests
-
-    func test_setIntent_should_update_colors() {
+    func test_setup_shouldCallAllUseCases() {
         // GIVEN
-        let intentMock: TagIntent = .danger
-
-        let newTagColorsMock = TagColors.mocked()
-
-        self.getColorsUseCaseMock._executeWithThemeAndIntentAndVariant = { theme, intent, variant in
-            if self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount == 0 {
-                return self.tagColorsMock
-            } else {
-                return newTagColorsMock
-            }
-        }
-
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            getColorsUseCase: self.getColorsUseCaseMock
-        )
+        let stub = Stub()
+        let viewModel = stub.viewModel
 
         // WHEN
-        viewModel.setIntent(intentMock)
+        viewModel.setup(stub: stub)
 
         // THEN
-        XCTAssertEqual(viewModel.colors,
-                       newTagColorsMock,
-                       "Wrong colors value")
+        XCTAssertEqualToExpected(on: stub)
 
         // **
-        // GetColorsUseCase
-        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
-                       2,
-                       "Wrong call number on execute on getColorsUseCase")
-
-        XCTAssertEqual(getColorsUseCaseArgs?.intent,
-                       intentMock,
-                       "Wrong intent parameter on execute on getColorsUseCase")
-        // **
-    }
-
-    func test_setVariant_should_update_colors() {
-        // GIVEN
-        let variantMock: TagVariant = .outlined
-
-        let newTagColorsMock = TagColors.mocked()
-
-        self.getColorsUseCaseMock._executeWithThemeAndIntentAndVariant = { theme, intent, variant in
-            if self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount == 0 {
-                return self.tagColorsMock
-            } else {
-                return newTagColorsMock
-            }
-        }
-
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            getColorsUseCase: self.getColorsUseCaseMock
+        // UseCase Calls Count
+        TagGetBorderUseCaseableMockTest.XCTAssert(
+            stub.getBorderUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: stub.givenSize,
+            givenVariant: stub.givenVariant,
+            expectedReturnValue: stub.expectedBorder
         )
 
-        // WHEN
-        viewModel.setVariant(variantMock)
+        TagGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenIntent: stub.givenIntent,
+            givenVariant: stub.givenVariant,
+            expectedReturnValue: stub.expectedColors
+        )
 
-        // THEN
-        XCTAssertEqual(viewModel.colors,
-                       newTagColorsMock,
-                       "Wrong colors value")
+        TagGetHeightUseCaseableMockTest.XCTAssert(
+            stub.getHeightUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenSize: stub.givenSize,
+            expectedReturnValue: stub.expectedHeight
+        )
 
-        // **
-        // GetColorsUseCase
-        let getColorsUseCaseArgs = self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReceivedArguments
-        XCTAssertEqual(self.getColorsUseCaseMock.executeWithThemeAndIntentAndVariantCallsCount,
-                       2,
-                       "Wrong call number on execute on getColorsUseCase")
+        TagGetSpacingsUseCaseableMockTest.XCTAssert(
+            stub.getSpacingsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            expectedReturnValue: stub.expectedSpacings
+        )
 
-        XCTAssertEqual(getColorsUseCaseArgs?.variant,
-                       variantMock,
-                       "Wrong variant parameter on execute on getColorsUseCase")
+        TagGetTextFontUseCaseableMockTest.XCTAssert(
+            stub.getTextFontUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            expectedReturnValue: stub.expectedTextFont
+        )
         // **
     }
 
-    func test_setIconImage() {
-        // GIVEN
-        let newIconImage = Image(systemName: "square.and.arrow.up.fill")
+    // MARK: - Setter
 
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            getColorsUseCase: self.getColorsUseCaseMock
-        )
+    func test_themeChanged_shouldUpdateAllProperties_exceptHeight() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
+
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
+
+        let givenTheme = ThemeGeneratedMock.mocked()
 
         // WHEN
-        viewModel.setIconImage(newIconImage)
+        viewModel.theme = givenTheme
 
         // THEN
-        XCTAssertEqual(viewModel.iconImage,
-                       newIconImage,
-                       "Wrong iconImage value")
-    }
+        XCTAssertEqualToExpected(on: stub)
 
-    func test_setText() {
-        // GIVEN
-        let newText = "New text"
-
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            getColorsUseCase: self.getColorsUseCaseMock
+        // **
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getHeight: true
         )
 
-        // WHEN
-        viewModel.setAttributedText(.init("AT Text"))
-        viewModel.setText(newText)
-
-        // THEN
-        XCTAssertEqual(viewModel.text,
-                       newText,
-                       "Wrong text value")
-        XCTAssertNil(viewModel.attributedText,
-                     "Wrong attributedText value")
-    }
-
-    func test_setAttributedText() {
-        // GIVEN
-        let newAttributedText = AttributedString("AT Text")
-
-        let viewModel = TagViewModel(
-            theme: self.themeMock,
-            getColorsUseCase: self.getColorsUseCaseMock
+        TagGetBorderUseCaseableMockTest.XCTAssert(
+            stub.getBorderUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            givenSize: stub.givenSize,
+            givenVariant: stub.givenVariant,
+            expectedReturnValue: stub.expectedBorder
         )
 
+        TagGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            givenIntent: stub.givenIntent,
+            givenVariant: stub.givenVariant,
+            expectedReturnValue: stub.expectedColors
+        )
+
+        TagGetSpacingsUseCaseableMockTest.XCTAssert(
+            stub.getSpacingsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            expectedReturnValue: stub.expectedSpacings
+        )
+
+        TagGetTextFontUseCaseableMockTest.XCTAssert(
+            stub.getTextFontUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: givenTheme,
+            expectedReturnValue: stub.expectedTextFont
+        )
+        // **
+    }
+
+    func test_intent_shouldUpdate_Colors() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
+
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
+
+        let givenIntent = TagIntent.success
+
         // WHEN
-        viewModel.setText("My Text")
-        viewModel.setAttributedText(newAttributedText)
+        viewModel.intent = givenIntent
 
         // THEN
-        XCTAssertEqual(viewModel.attributedText,
-                       newAttributedText,
-                       "Wrong attributedText value")
-        XCTAssertNil(viewModel.text,
-                     "Wrong text value")
+        XCTAssertEqualToExpected(on: stub)
+
+        // **
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getBorder: true,
+            getHeight: true,
+            getSpacings: true,
+            getTextFont: true
+        )
+
+        TagGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenIntent: givenIntent,
+            givenVariant: stub.givenVariant,
+            expectedReturnValue: stub.expectedColors
+        )
+        // **
     }
+
+    func test_size_shouldUpdate_border_and_height() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
+
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
+
+        let givenSize = TagSize.medium
+
+        // WHEN
+        viewModel.size = givenSize
+
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        // **
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getColors: true,
+            getSpacings: true,
+            getTextFont: true
+        )
+
+        TagGetBorderUseCaseableMockTest.XCTAssert(
+            stub.getBorderUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: givenSize,
+            givenVariant: stub.givenVariant,
+            expectedReturnValue: stub.expectedBorder
+        )
+
+        TagGetHeightUseCaseableMockTest.XCTAssert(
+            stub.getHeightUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenSize: givenSize,
+            expectedReturnValue: stub.expectedHeight
+        )
+        // **
+    }
+
+    func test_variant_shouldUpdate_border_and_colors() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
+
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
+
+        let givenVariant = TagVariant.outlined
+
+        // WHEN
+        viewModel.variant = givenVariant
+
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        // **
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getHeight: true,
+            getSpacings: true,
+            getTextFont: true
+        )
+
+        TagGetBorderUseCaseableMockTest.XCTAssert(
+            stub.getBorderUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenSize: stub.givenSize,
+            givenVariant: givenVariant,
+            expectedReturnValue: stub.expectedBorder
+        )
+
+        TagGetColorsUseCaseableMockTest.XCTAssert(
+            stub.getColorsUseCaseMock,
+            expectedNumberOfCalls: 1,
+            givenTheme: stub.givenTheme,
+            givenIntent: stub.givenIntent,
+            givenVariant: givenVariant,
+            expectedReturnValue: stub.expectedColors
+        )
+        // **
+    }
+
+    func test_allSetter_exceptTheme_withoutChange() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
+
+        viewModel.setup(stub: stub)
+        stub.resetMockedData()
+
+        // WHEN
+        viewModel.intent = stub.givenIntent
+        viewModel.size = stub.givenSize
+        viewModel.variant = stub.givenVariant
+
+        // THEN
+        XCTAssertEqualToExpected(on: stub)
+
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getBorder: true,
+            getColors: true,
+            getHeight: true,
+            getSpacings: true,
+            getTextFont: true
+        )
+    }
+
+    func test_allSetter_exceptTheme_withoutSetupBefore() {
+        // GIVEN
+        let stub = Stub()
+        let viewModel = stub.viewModel
+
+        // WHEN
+        viewModel.intent = .accent
+        viewModel.size = .medium
+        viewModel.variant = .filled
+
+        // THEN
+        XCTAssertEqualToExpected(
+            on: stub,
+            otherBorder: .init(),
+            otherColors: .init(),
+            otherSpacings: .init(),
+            otherHeight: true,
+            otherTextFont: .body
+        )
+
+        // UseCase Calls Count
+        XCTAssertNotCalled(
+            on: stub,
+            getBorder: true,
+            getColors: true,
+            getHeight: true,
+            getSpacings: true,
+            getTextFont: true
+        )
+    }
+}
+
+// MARK: - Stub
+
+private final class Stub: TagViewModelStub {
+
+    // MARK: - Given Properties
+
+    let givenTheme = ThemeGeneratedMock.mocked()
+    let givenIntent = TagIntent.danger
+    let givenSize = TagSize.large
+    let givenVariant = TagVariant.tinted
+
+    // MARK: - Expected Properties
+
+    let expectedBorder = TagBorder()
+    let expectedColors = TagColors()
+    let expectedSpacings = TagSpacings()
+    let expectedHeight: CGFloat = 10
+    let expectedTextFont: Font = .subheadline
+
+    // MARK: - Initialization
+
+    init() {
+        let getBorderUseCaseMock = TagGetBorderUseCaseableGeneratedMock()
+        getBorderUseCaseMock.executeWithThemeAndSizeAndVariantReturnValue = self.expectedBorder
+
+        let getColorsUseCaseMock = TagGetColorsUseCaseableGeneratedMock()
+        getColorsUseCaseMock.executeWithThemeAndIntentAndVariantReturnValue = self.expectedColors
+
+        let getHeightUseCaseMock = TagGetHeightUseCaseableGeneratedMock()
+        getHeightUseCaseMock.executeWithSizeReturnValue = self.expectedHeight
+
+        let getSpacingsUseCaseMock = TagGetSpacingsUseCaseableGeneratedMock()
+        getSpacingsUseCaseMock.executeWithThemeReturnValue = self.expectedSpacings
+
+        let getTextFontUseCaseMock = TagGetTextFontUseCaseableGeneratedMock()
+        getTextFontUseCaseMock.executeWithThemeReturnValue = self.expectedTextFont
+
+        let viewModel = TagViewModel(
+            getBorderUseCase: getBorderUseCaseMock,
+            getColorsUseCase: getColorsUseCaseMock,
+            getHeightUseCase: getHeightUseCaseMock,
+            getSpacingsUseCase: getSpacingsUseCaseMock,
+            getTextFontUseCase: getTextFontUseCaseMock
+        )
+
+        super.init(
+            viewModel: viewModel,
+            getBorderUseCaseMock: getBorderUseCaseMock,
+            getColorsUseCaseMock: getColorsUseCaseMock,
+            getHeightUseCaseMock: getHeightUseCaseMock,
+            getSpacingsUseCaseMock: getSpacingsUseCaseMock,
+            getTextFontUseCaseMock: getTextFontUseCaseMock
+        )
+    }
+}
+
+// MARK: - Extension
+
+private extension TagViewModel {
+
+    func setup(stub: Stub) {
+        self.setup(
+            theme: stub.givenTheme,
+            intent: stub.givenIntent,
+            size: stub.givenSize,
+            variant: stub.givenVariant
+        )
+    }
+}
+
+// MARK: - XCT
+
+private func XCTAssertNotCalled(
+    on stub: Stub,
+    getBorder getBorderNotCalled: Bool = false,
+    getColors getColorsNotCalled: Bool = false,
+    getHeight getHeightNotCalled: Bool = false,
+    getSpacings getSpacingsNotCalled: Bool = false,
+    getTextFont getTextFontNotCalled: Bool = false
+) {
+    if getBorderNotCalled {
+        TagGetBorderUseCaseableMockTest.XCTCallsCount(
+            stub.getBorderUseCaseMock,
+            executeWithThemeAndSizeAndVariantNumberOfCalls: 0
+        )
+    }
+
+    if getColorsNotCalled {
+        TagGetColorsUseCaseableMockTest.XCTCallsCount(
+            stub.getColorsUseCaseMock,
+            executeWithThemeAndIntentAndVariantNumberOfCalls: 0
+        )
+    }
+
+    if getHeightNotCalled {
+        TagGetHeightUseCaseableMockTest.XCTCallsCount(
+            stub.getHeightUseCaseMock,
+            executeWithSizeNumberOfCalls: 0
+        )
+    }
+
+    if getSpacingsNotCalled {
+        TagGetSpacingsUseCaseableMockTest.XCTCallsCount(
+            stub.getSpacingsUseCaseMock,
+            executeWithThemeNumberOfCalls: 0
+        )
+    }
+
+    if getTextFontNotCalled {
+        TagGetTextFontUseCaseableMockTest.XCTCallsCount(
+            stub.getTextFontUseCaseMock,
+            executeWithThemeNumberOfCalls: 0
+        )
+    }
+}
+
+private func XCTAssertEqualToExpected(
+    on stub: Stub,
+    otherBorder: TagBorder? = nil,
+    otherColors: TagColors? = nil,
+    otherSpacings: TagSpacings? = nil,
+    otherHeight: Bool = false,
+    otherTextFont: Font? = nil
+) {
+    let viewModel = stub.viewModel
+
+    XCTAssertEqual(
+        viewModel.border,
+        otherBorder ?? stub.expectedBorder,
+        "Wrong border value"
+    )
+    XCTAssertEqual(
+        viewModel.colors,
+        otherColors ?? stub.expectedColors,
+        "Wrong colors value"
+    )
+    XCTAssertEqual(
+        viewModel.spacings,
+        otherSpacings ?? stub.expectedSpacings,
+        "Wrong spacings value"
+    )
+    XCTAssertEqual(
+        viewModel.height,
+        otherHeight ? nil : stub.expectedHeight,
+        "Wrong height value"
+    )
+    XCTAssertEqual(
+        viewModel.textFont,
+        otherTextFont ?? stub.expectedTextFont,
+        "Wrong textFont value"
+    )
 }
