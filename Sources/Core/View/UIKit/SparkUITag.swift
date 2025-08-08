@@ -206,12 +206,12 @@ public final class SparkUITag: UIView {
 
     private let viewModel: TagUIViewModel
 
-    private var heightConstraint: NSLayoutConstraint?
+    private var heightConstraint = NSLayoutConstraint()
 
-    private var contentStackViewLeadingConstraint: NSLayoutConstraint?
-    private var contentStackViewTrailingConstraint: NSLayoutConstraint?
+    private var contentStackViewLeadingConstraint = NSLayoutConstraint()
+    private var contentStackViewTrailingConstraint = NSLayoutConstraint()
 
-    private var iconImageViewWidthConstraint: NSLayoutConstraint?
+    private var iconImageViewWidthConstraint = NSLayoutConstraint()
 
     @ScaledUIMetric private var height: CGFloat
     @ScaledUIMetric private var iconSize: CGFloat
@@ -311,7 +311,7 @@ public final class SparkUITag: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.heightConstraint = self.heightAnchor.constraint(equalToConstant: self.height)
-        self.heightConstraint?.isActive = true
+        self.heightConstraint.isActive = true
     }
 
     private func setupContentStackViewConstraints() {
@@ -322,8 +322,8 @@ public final class SparkUITag: UIView {
         self.contentStackViewTrailingConstraint = self.contentStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         self.contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
 
-        self.contentStackViewLeadingConstraint?.isActive = true
-        self.contentStackViewTrailingConstraint?.isActive = true
+        self.contentStackViewLeadingConstraint.isActive = true
+        self.contentStackViewTrailingConstraint.isActive = true
     }
 
     private func setupIconSizeViewsContraints() {
@@ -332,7 +332,7 @@ public final class SparkUITag: UIView {
         self.iconImageViewWidthConstraint = self.iconImageView.widthAnchor.constraint(
             equalToConstant: self.iconSize
         )
-        self.iconImageViewWidthConstraint?.isActive = true
+        self.iconImageViewWidthConstraint.isActive = true
 
         self.iconImageView.heightAnchor.constraint(equalTo: self.iconImageView.widthAnchor).isActive = true
     }
@@ -357,24 +357,24 @@ public final class SparkUITag: UIView {
     }
 
     private func updateHeight() {
-        if self.heightConstraint?.constant != self.height {
-            self.heightConstraint?.constant = self.height
+        if self.heightConstraint.constant != self.height {
+            self.heightConstraint.constant = self.height
             self.updateConstraintsIfNeeded()
         }
     }
 
     private func updateIconSizeHeight() {
-        if self.iconImageViewWidthConstraint?.constant != self.iconSize {
-            self.iconImageViewWidthConstraint?.constant = self.iconSize
+        if self.iconImageViewWidthConstraint.constant != self.iconSize {
+            self.iconImageViewWidthConstraint.constant = self.iconSize
             self.iconImageView.updateConstraintsIfNeeded()
         }
     }
 
     private func updateHorizontalPadding() {
         // Reload spacing only if value changed
-        if self.contentStackViewLeadingConstraint?.constant != self.horizontalPadding {
-            self.contentStackViewLeadingConstraint?.constant = self.horizontalPadding
-            self.contentStackViewTrailingConstraint?.constant = -self.horizontalPadding
+        if self.contentStackViewLeadingConstraint.constant != self.horizontalPadding {
+            self.contentStackViewLeadingConstraint.constant = self.horizontalPadding
+            self.contentStackViewTrailingConstraint.constant = -self.horizontalPadding
             self.contentStackView.updateConstraintsIfNeeded()
         }
     }
@@ -388,7 +388,7 @@ public final class SparkUITag: UIView {
     private func setupSubscriptions() {
         // **
         // Border
-        self.viewModel.$border.subscribe(in: &self.subscriptions) { [weak self] border in
+        self.viewModel.$border.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] border in
             guard let self else { return }
 
             self._borderWidth = .init(wrappedValue: border.width)
@@ -403,7 +403,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Colors
-        self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
+        self.viewModel.$colors.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] colors in
             guard let self else { return }
 
             self.backgroundColor = colors.backgroundColor.uiColor
@@ -416,7 +416,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Spacings
-        self.viewModel.$spacings.subscribe(in: &self.subscriptions) { [weak self] spacings in
+        self.viewModel.$spacings.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] spacings in
             guard let self else { return }
 
             self._horizontalPadding = .init(wrappedValue: spacings.horizontalPadding)
@@ -431,7 +431,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Height
-        self.viewModel.$height.subscribe(in: &self.subscriptions) { [weak self] height in
+        self.viewModel.$height.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] height in
             guard let self else { return }
 
             self.height = height
@@ -442,7 +442,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Text Font
-        self.viewModel.$textFont.subscribe(in: &self.subscriptions) { [weak self] textFont in
+        self.viewModel.$textFont.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] textFont in
             guard let self else { return }
 
             self.textLabel.font = textFont

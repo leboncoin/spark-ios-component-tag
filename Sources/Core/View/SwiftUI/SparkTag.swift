@@ -419,7 +419,7 @@ public struct SparkTag<Label>: View where Label: View {
             self.icon?
                 .resizable()
                 .scaledToFit()
-                .sparkScaledFrame(
+                .sparkFrame(
                     height: TagConstants.iconSize,
                     relativeTo: .body
                 )
@@ -435,12 +435,10 @@ public struct SparkTag<Label>: View where Label: View {
                 .truncationMode(.tail)
                 .accessibilityIdentifier(AccessibilityIdentifier.text)
         }
-//        .padding(.init(
-        .sparkScaledPadding(.init(
+        .sparkPadding(.init(
             horizontal: self.viewModel.spacings.horizontalPadding
-//            horizontal: 8
         ))
-        .sparkScaledFrame(
+        .sparkFrame(
             height: self.viewModel.height,
             relativeTo: .title3
         )
@@ -461,7 +459,7 @@ public struct SparkTag<Label>: View where Label: View {
                 self.label()
             }
         }
-//        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .onAppear() {
             self.viewModel.setup(
                 theme: self.theme,
