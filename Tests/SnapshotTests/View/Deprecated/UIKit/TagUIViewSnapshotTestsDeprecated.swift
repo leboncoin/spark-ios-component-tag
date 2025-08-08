@@ -1,5 +1,5 @@
 //
-//  TagUIViewSnapshotTests.swift
+//  TagUIViewSnapshotTestsDeprecated.swift
 //  SparkComponentTagTests
 //
 //  Created by robin.lemaire on 04/05/2023.
@@ -14,7 +14,7 @@ import SnapshotTesting
 import SparkTheming
 import SparkTheme
 
-final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
+final class TagUIViewSnapshotTestsDeprecated: UIKitComponentSnapshotTestCase {
 
     // MARK: - Properties
 
@@ -23,7 +23,7 @@ final class TagUIViewSnapshotTests: UIKitComponentSnapshotTestCase {
     // MARK: - Tests
 
     func test() {
-        let scenarios = TagScenarioSnapshotTests.allCases
+        let scenarios = TagScenarioSnapshotTestsDeprecated.allCases
 
         for scenario in scenarios {
             let configurations = scenario.configuration(isSwiftUIComponent: false)
