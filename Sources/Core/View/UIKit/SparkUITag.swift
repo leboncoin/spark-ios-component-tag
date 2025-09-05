@@ -65,6 +65,7 @@ public final class SparkUITag: UIView {
             .required,
             for: .horizontal
         )
+        imageView.isHidden = true
         return imageView
     }()
 
@@ -86,6 +87,7 @@ public final class SparkUITag: UIView {
             .required,
             for: .horizontal
         )
+        label.isHidden = true
         return label
     }()
 
