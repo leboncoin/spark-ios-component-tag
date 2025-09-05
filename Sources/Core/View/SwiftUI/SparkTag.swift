@@ -30,6 +30,7 @@ import SparkTheming
 ///             theme: self.theme
 ///         )
 ///     }
+/// }     
 /// ```
 /// ![Tag rendering with a localized text.](component_with_text.png)
 ///
@@ -52,6 +53,7 @@ import SparkTheming
 ///             }
 ///         )
 ///     }
+/// }
 /// ```
 /// ![Tag rendering with a label.](component_with_label.png)
 ///
@@ -71,6 +73,7 @@ import SparkTheming
 ///         .accessibilityLabel("My Tag")
 ///         .sparkAccessibilityLargeContentText("My Tag")
 ///     }
+/// }
 /// ```
 /// ![Tag rendering with an icon.](component_with_icon.png)
 ///
@@ -86,6 +89,7 @@ import SparkTheming
 ///             theme: self.theme
 ///         )
 ///     }
+/// }
 /// ```
 /// ![Tag rendering with a localized text and icon.](component_with_text_and_icon.png)
 ///
@@ -106,6 +110,7 @@ import SparkTheming
 ///             }
 ///         )
 ///     }
+/// }
 /// ```
 /// ![Tag rendering with a label and icon.](component_with_label_and_icon.png)
 ///
