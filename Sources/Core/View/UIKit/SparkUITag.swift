@@ -94,7 +94,7 @@ public final class SparkUITag: UIView {
     // MARK: - Public Properties
 
     /// The spark theme of the tag.
-    public var theme: Theme {
+    public var theme: any Theme {
         get {
             return self.viewModel.theme
         }
@@ -103,7 +103,7 @@ public final class SparkUITag: UIView {
         }
     }
 
-    /// Set the **intent** on the``SparkUITag``.
+    /// Set the **intent** on the ``SparkUITag``.
     ///
     /// The default value for this property is *TagIntent.main*.
     public var intent: TagIntent {
@@ -115,7 +115,7 @@ public final class SparkUITag: UIView {
         }
     }
 
-    /// Set the **size** on the``SparkUITag``.
+    /// Set the **size** on the ``SparkUITag``.
     ///
     /// The default value for this property is *TagSize.medium*.
     public var size: TagSize {
@@ -127,7 +127,7 @@ public final class SparkUITag: UIView {
         }
     }
 
-    /// Set the **variant** on the``SparkUITag``.
+    /// Set the **variant** on the ``SparkUITag``.
     ///
     /// The default value for this property is *TagVariant.filled*.
     public var variant: TagVariant {
@@ -139,7 +139,7 @@ public final class SparkUITag: UIView {
         }
     }
 
-    /// Set the **isHighlighted** on the``SparkUITag``.
+    /// Set the **isHighlighted** on the ``SparkUITag``.
     ///
     /// The default value for this property is *false*.
     ///
@@ -245,7 +245,7 @@ public final class SparkUITag: UIView {
     /// ```
     ///
     /// ![Tag rendering with a text and icon.](component_with_text_and_icon.png)
-    public init(theme: Theme) {
+    public init(theme: any Theme) {
         self.viewModel = .init(
             theme: theme
         )

@@ -65,20 +65,20 @@ final internal class TagViewModel: ObservableObject {
 
     // MARK: - Use Case Properties
 
-    private let getBorderUseCase: TagGetBorderUseCaseable
-    private let getColorsUseCase: TagGetColorsUseCaseable
-    private let getHeightUseCase: TagGetHeightUseCaseable
-    private let getSpacingsUseCase: TagGetSpacingsUseCaseable
-    private let getTextFontUseCase: TagGetTextFontUseCaseable
+    private let getBorderUseCase: any TagGetBorderUseCaseable
+    private let getColorsUseCase: any TagGetColorsUseCaseable
+    private let getHeightUseCase: any TagGetHeightUseCaseable
+    private let getSpacingsUseCase: any TagGetSpacingsUseCaseable
+    private let getTextFontUseCase: any TagGetTextFontUseCaseable
 
     // MARK: - Initialization
 
     init(
-        getBorderUseCase: TagGetBorderUseCaseable = TagGetBorderUseCase(),
-        getColorsUseCase: TagGetColorsUseCaseable = TagGetColorsUseCase(),
-        getHeightUseCase: TagGetHeightUseCaseable = TagGetHeightUseCase(),
-        getSpacingsUseCase: TagGetSpacingsUseCaseable = TagGetSpacingsUseCase(),
-        getTextFontUseCase: TagGetTextFontUseCaseable = TagGetTextFontUseCase()
+        getBorderUseCase: any TagGetBorderUseCaseable = TagGetBorderUseCase(),
+        getColorsUseCase: any TagGetColorsUseCaseable = TagGetColorsUseCase(),
+        getHeightUseCase: any TagGetHeightUseCaseable = TagGetHeightUseCase(),
+        getSpacingsUseCase: any TagGetSpacingsUseCaseable = TagGetSpacingsUseCase(),
+        getTextFontUseCase: any TagGetTextFontUseCaseable = TagGetTextFontUseCase()
     ) {
         self.getBorderUseCase = getBorderUseCase
         self.getColorsUseCase = getColorsUseCase
@@ -90,7 +90,7 @@ final internal class TagViewModel: ObservableObject {
     // MARK: - Setup
 
     func setup(
-        theme: Theme,
+        theme: any Theme,
         intent: TagIntent,
         size: TagSize,
         variant: TagVariant

@@ -13,7 +13,7 @@ protocol TagGetContentColorsUseCaseable {
     // sourcery: theme = "Identical"
     func execute(
         intent: TagIntent,
-        colors: Colors
+        colors: any Colors
     ) -> TagContentColors
 }
 
@@ -23,7 +23,7 @@ struct TagGetContentColorsUseCase: TagGetContentColorsUseCaseable {
 
     func execute(
         intent: TagIntent,
-        colors: Colors
+        colors: any Colors
     ) -> TagContentColors {
 
         switch intent {

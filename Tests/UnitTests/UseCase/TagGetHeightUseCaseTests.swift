@@ -16,7 +16,6 @@ final class TagGetHeightUseCaseTests: XCTestCase {
 
     func test_execute_with_medium_size() {
         // GIVEN
-        let theme = ThemeGeneratedMock.mocked()
         let useCase = TagGetHeightUseCase()
 
         // WHEN
@@ -28,7 +27,6 @@ final class TagGetHeightUseCaseTests: XCTestCase {
 
     func test_execute_with_large_size() {
         // GIVEN
-        let theme = ThemeGeneratedMock.mocked()
         let useCase = TagGetHeightUseCase()
 
         // WHEN
