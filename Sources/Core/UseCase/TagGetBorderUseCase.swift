@@ -14,7 +14,7 @@ import SwiftUI
 protocol TagGetBorderUseCaseable {
     // sourcery: theme = "Identical"
     func execute(
-        theme: Theme,
+        theme: any Theme,
         size: TagSize,
         variant: TagVariant
     ) -> TagBorder
@@ -25,7 +25,7 @@ final class TagGetBorderUseCase: TagGetBorderUseCaseable {
     // MARK: - Methods
 
     func execute(
-        theme: Theme,
+        theme: any Theme,
         size: TagSize,
         variant: TagVariant
     ) -> TagBorder {

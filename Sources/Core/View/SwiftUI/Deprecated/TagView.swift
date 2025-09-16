@@ -35,7 +35,7 @@ public struct TagView: View {
     ///
     /// - Note: You must use the Modifier to add at least iconImage or/and text.
     public init(
-        theme: Theme,
+        theme: any Theme,
         intent: TagIntent,
         variant: TagVariant
     ) {

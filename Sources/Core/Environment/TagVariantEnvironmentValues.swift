@@ -14,7 +14,7 @@ extension EnvironmentValues {
 
 public extension View {
 
-    /// Set the **variant** on the``SparkTag``.
+    /// Set the **variant** on the ``SparkTag``.
     ///
     /// The default value for this property is *TagVariant.filled*.
     func sparkTagVariant(_ variant: TagVariant) -> some View {

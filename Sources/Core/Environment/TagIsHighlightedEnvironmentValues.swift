@@ -14,7 +14,7 @@ extension EnvironmentValues {
 
 public extension View {
 
-    /// Set the **isHighlighted** on the``SparkTag``.
+    /// Set the **isHighlighted** on the ``SparkTag``.
     ///
     /// The default value for this property is *false*.
     ///

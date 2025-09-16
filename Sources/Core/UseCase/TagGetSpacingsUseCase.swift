@@ -13,14 +13,14 @@ import SwiftUI
 // sourcery: AutoMockable, AutoMockTest
 protocol TagGetSpacingsUseCaseable {
     // sourcery: theme = "Identical"
-    func execute(theme: Theme) -> TagSpacings
+    func execute(theme: any Theme) -> TagSpacings
 }
 
 final class TagGetSpacingsUseCase: TagGetSpacingsUseCaseable {
 
     // MARK: - Methods
 
-    func execute(theme: Theme) -> TagSpacings {
+    func execute(theme: any Theme) -> TagSpacings {
         let spacing = theme.layout.spacing
         return .init(
             horizontalPadding: spacing.medium,

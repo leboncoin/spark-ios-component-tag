@@ -12,7 +12,7 @@ import SparkTheming
 protocol TagGetColorsUseCaseable {
     // sourcery: theme = "Identical"
     func execute(
-        theme: Theme,
+        theme: any Theme,
         intent: TagIntent,
         variant: TagVariant
     ) -> TagColors
@@ -33,7 +33,7 @@ struct TagGetColorsUseCase: TagGetColorsUseCaseable {
     // MARK: - Methods
 
     func execute(
-        theme: Theme,
+        theme: any Theme,
         intent: TagIntent,
         variant: TagVariant
     ) -> TagColors {

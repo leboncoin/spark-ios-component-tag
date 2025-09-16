@@ -168,7 +168,7 @@ public struct SparkTag<Label>: View where Label: View {
 
     // MARK: - Private Properties
 
-    private let theme: Theme
+    private let theme: any Theme
     private let label: () -> Label
     private let icon: Image?
 
@@ -205,7 +205,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// ![Tag rendering with a localized text.](component_with_text.png)
     public init(
         _ textKey: LocalizedStringKey,
-        theme: Theme
+        theme: any Theme
     ) where Label == Text {
         self.theme = theme
         self.label = { Text(textKey) }
@@ -235,7 +235,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// ![Tag rendering with a text.](component_with_text.png)
     public init(
         _ text: String,
-        theme: Theme
+        theme: any Theme
     ) where Label == Text {
         self.theme = theme
         self.label = { Text(text) }
@@ -268,7 +268,7 @@ public struct SparkTag<Label>: View where Label: View {
     ///
     /// ![Tag rendering with a label.](component_with_label.png)
     public init(
-        theme: Theme,
+        theme: any Theme,
         @ViewBuilder label: @escaping () -> Label
     ) {
         self.theme = theme
@@ -302,7 +302,7 @@ public struct SparkTag<Label>: View where Label: View {
     ///
     /// ![Tag rendering with an icon.](component_with_icon.png)
     public init(
-        theme: Theme,
+        theme: any Theme,
         icon: Image
     ) where Label == EmptyView {
         self.theme = theme
@@ -339,7 +339,7 @@ public struct SparkTag<Label>: View where Label: View {
     public init(
         _ textKey: LocalizedStringKey,
         icon: Image,
-        theme: Theme
+        theme: any Theme
     ) where Label == Text {
         self.theme = theme
         self.icon = icon
@@ -372,7 +372,7 @@ public struct SparkTag<Label>: View where Label: View {
     public init(
         _ text: String,
         icon: Image,
-        theme: Theme
+        theme: any Theme
     ) where Label == Text {
         self.theme = theme
         self.icon = icon
@@ -407,7 +407,7 @@ public struct SparkTag<Label>: View where Label: View {
     ///
     /// ![Tag rendering with a label and icon.](component_with_label_and_icon.png)
     public init(
-        theme: Theme,
+        theme: any Theme,
         icon: Image,
         @ViewBuilder label: @escaping () -> Label
     ) {

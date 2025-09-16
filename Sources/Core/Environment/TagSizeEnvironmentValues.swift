@@ -14,7 +14,7 @@ extension EnvironmentValues {
 
 public extension View {
 
-    /// Set the **size** on the``SparkTag``.
+    /// Set the **size** on the ``SparkTag``.
     ///
     /// The default value for this property is *TagSize.medium*.
     func sparkTagSize(_ size: TagSize) -> some View {
