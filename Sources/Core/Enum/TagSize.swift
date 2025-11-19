@@ -17,5 +17,5 @@ public enum TagSize: CaseIterable {
 
     // MARK: - Properties
 
-    static let `default`: Self = .medium
+    public static let `default`: Self = .medium
 }
