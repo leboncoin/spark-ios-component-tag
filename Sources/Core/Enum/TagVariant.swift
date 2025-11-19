@@ -19,5 +19,5 @@ public enum TagVariant: CaseIterable {
 
     // MARK: - Properties
 
-    static let `default`: Self = .filled
+    public static let `default`: Self = .filled
 }

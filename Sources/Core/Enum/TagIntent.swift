@@ -23,5 +23,5 @@ public enum TagIntent: CaseIterable {
 
     // MARK: - Properties
 
-    static let `default`: Self = .main
+    public static let `default`: Self = .main
 }
