@@ -56,6 +56,7 @@ public final class SparkUITag: UIView {
     public var iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.tintAdjustmentMode = .normal
         imageView.accessibilityIdentifier = TagAccessibilityIdentifier.iconImage
         imageView.setContentCompressionResistancePriority(
             .required,
