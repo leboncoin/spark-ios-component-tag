@@ -25,6 +25,12 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
 
     typealias Constants = ComponentSnapshotTestConstants
 
+    // MARK: - Properties
+
+    var isDocumentation: Bool {
+        self == .documentation
+    }
+
     // MARK: - Configurations
 
     func configuration(isSwiftUIComponent: Bool) -> [TagConfigurationSnapshotTests] {
@@ -44,12 +50,6 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
         case .documentation:
             return self.documentation()
         }
-    }
-
-    // MARK: - Case Iterable
-
-    static func allCases(forDocumentation: Bool = false) -> [Self] {
-        forDocumentation ? [.documentation] : Self.allCases.filter { $0 != .documentation }
     }
 
     // MARK: - Scenarios
@@ -245,39 +245,61 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
             )
         ]
     }
+
     // MARK: - Documentation
 
     // Used to generate screenshot for Documentation
     private func documentation() -> [TagConfigurationSnapshotTests] {
-        let contents = [
-            TagContentResilience.label,
-            .withoutLabel,
-            .other
-        ]
-        let isIcons = Bool.allCases
-        let isHighlighteds = Bool.allCases
+        var items: [TagConfigurationSnapshotTests] = []
 
-        return contents.flatMap { content in
-            isIcons.flatMap { isIcon in
-                isHighlighteds.map { isHighlighted in
-                    guard isIcon || content.text != nil || content == .other else {
-                        return nil
-                    }
+        // Icon only
+        items.append(.init(
+            scenario: self,
+            content: .withoutLabel,
+            isIcon: true,
+            documentationName: "with_icon"
+        ))
 
-                    return .init(
-                        scenario: self,
-                        intent: .main,
-                        size: .medium,
-                        variant: .tinted,
-                        isHighlighted: isHighlighted,
-                        content: content,
-                        isIcon: isIcon,
-                        modes: Constants.Modes.all,
-                        sizes: [.large]
-                    )
-                }
-                .compactMap { $0 }
-            }
-        }
+        // Is highlighted
+        items.append(.init(
+            scenario: self,
+            size: .large,
+            isHighlighted: true,
+            documentationName: "with_is_highlighted"
+        ))
+
+        // Label
+        items.append(.init(
+            scenario: self,
+            content: .other,
+            isIcon: false,
+            documentationName: "with_label"
+        ))
+
+        // Label and icon
+        items.append(.init(
+            scenario: self,
+            content: .other,
+            isIcon: true,
+            documentationName: "with_label_and_icon"
+        ))
+
+        // Text
+        items.append(.init(
+            scenario: self,
+            content: .label,
+            isIcon: false,
+            documentationName: "with_text"
+        ))
+
+        // Text and icon
+        items.append(.init(
+            scenario: self,
+            content: .label,
+            isIcon: true,
+            documentationName: "with_text_and_icon"
+        ))
+
+        return items
     }
 }
