@@ -32,7 +32,7 @@ import SparkTheming
 /// tag.isHighlighted = true
 ///
 /// ```
-/// ![Tag rendering with a text and icon.](component_with_text_and_icon.png)
+/// ![Tag rendering with a text and icon.](tag_with_text_and_icon.png)
 public final class SparkUITag: UIView {
 
     // MARK: - Components
@@ -52,7 +52,7 @@ public final class SparkUITag: UIView {
     /// The UIImageView used to display the tag icon.
     ///
     /// Please **do not set an image** in this imageView but use
-    /// the ``iconImage`` directly on the ``SparkUITag``.
+    /// the ``icon`` directly on the ``SparkUITag``.
     public var iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -96,47 +96,35 @@ public final class SparkUITag: UIView {
 
     /// The spark theme of the tag.
     public var theme: any Theme {
-        get {
-            return self.viewModel.theme
-        }
-        set {
-            self.viewModel.theme = newValue
+        didSet {
+            self.viewModel.theme = self.theme
         }
     }
 
     /// Set the **intent** on the ``SparkUITag``.
     ///
-    /// The default value for this property is *TagIntent.main*.
-    public var intent: TagIntent {
-        get {
-            return self.viewModel.intent
-        }
-        set {
-            self.viewModel.intent = newValue
+    /// Check the ``TagIntent`` to see the **default** value.
+    public var intent: TagIntent = .default {
+        didSet {
+            self.viewModel.intent = self.intent
         }
     }
 
     /// Set the **size** on the ``SparkUITag``.
     ///
-    /// The default value for this property is *TagSize.medium*.
-    public var size: TagSize {
-        get {
-            return self.viewModel.size
-        }
-        set {
-            self.viewModel.size = newValue
+    /// Check the ``TagSize`` to see the **default** value.
+    public var size: TagSize = .default {
+        didSet {
+            self.viewModel.size = self.size
         }
     }
 
     /// Set the **variant** on the ``SparkUITag``.
     ///
-    /// The default value for this property is *TagVariant.filled*.
-    public var variant: TagVariant {
-        get {
-            return self.viewModel.variant
-        }
-        set {
-            self.viewModel.variant = newValue
+    /// Check the ``TagVariant`` to see the **default** value.
+    public var variant: TagVariant = .default {
+        didSet {
+            self.viewModel.variant = self.variant
         }
     }
 
@@ -146,7 +134,7 @@ public final class SparkUITag: UIView {
     ///
     /// If the value is *true*, a custom corner radius will be applied.
     /// 
-    /// ![Tag rendering with when us highlighted is true.](component_with_is_highlighted.png)
+    /// ![Tag rendering with when us highlighted is true.](tag_with_is_highlighted.png)
     public var isHighlighted: Bool = false {
         didSet {
             self.updateBorder()
@@ -207,7 +195,7 @@ public final class SparkUITag: UIView {
 
     // MARK: - Private Properties
 
-    private let viewModel: TagUIViewModel
+    private let viewModel = TagViewModel()
 
     private var heightConstraint = NSLayoutConstraint()
 
@@ -245,11 +233,9 @@ public final class SparkUITag: UIView {
     /// tag.icon = .init(systemName: "checkmark")
     /// ```
     ///
-    /// ![Tag rendering with a text and icon.](component_with_text_and_icon.png)
+    /// ![Tag rendering with a text and icon.](tag_with_text_and_icon.png)
     public init(theme: any Theme) {
-        self.viewModel = .init(
-            theme: theme
-        )
+        self.theme = theme
 
         self._height = .init(
             wrappedValue: 0,
@@ -291,7 +277,12 @@ public final class SparkUITag: UIView {
         self.setupSubscriptions()
 
         // Load view model
-        self.viewModel.load()
+        self.viewModel.setup(
+            theme: self.theme,
+            intent: self.intent,
+            size: self.size,
+            variant: self.variant
+        )
     }
 
     // MARK: - Layout
@@ -391,7 +382,7 @@ public final class SparkUITag: UIView {
     private func setupSubscriptions() {
         // **
         // Border
-        self.viewModel.$border.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] border in
+        self.viewModel.$border.subscribe(in: &self.subscriptions) { [weak self] border in
             guard let self else { return }
 
             self._borderWidth = .init(wrappedValue: border.width)
@@ -406,7 +397,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Colors
-        self.viewModel.$colors.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] colors in
+        self.viewModel.$colors.subscribe(in: &self.subscriptions) { [weak self] colors in
             guard let self else { return }
 
             self.backgroundColor = colors.backgroundColor.uiColor
@@ -419,7 +410,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Spacings
-        self.viewModel.$spacings.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] spacings in
+        self.viewModel.$spacings.subscribe(in: &self.subscriptions) { [weak self] spacings in
             guard let self else { return }
 
             self._horizontalPadding = .init(wrappedValue: spacings.horizontalPadding)
@@ -434,7 +425,7 @@ public final class SparkUITag: UIView {
 
         // **
         // Height
-        self.viewModel.$height.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] height in
+        self.viewModel.$height.subscribe(in: &self.subscriptions) { [weak self] height in
             guard let self else { return }
 
             self.height = height
@@ -445,10 +436,10 @@ public final class SparkUITag: UIView {
 
         // **
         // Text Font
-        self.viewModel.$textFont.removeDuplicates().subscribe(in: &self.subscriptions) { [weak self] textFont in
+        self.viewModel.$textFont.subscribe(in: &self.subscriptions) { [weak self] textFont in
             guard let self else { return }
 
-            self.textLabel.font = textFont
+            self.textLabel.font(textFont)
         }
         // **
     }

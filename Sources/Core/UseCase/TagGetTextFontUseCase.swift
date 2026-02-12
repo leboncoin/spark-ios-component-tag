@@ -12,27 +12,15 @@ import UIKit
 
 // sourcery: AutoMockable, AutoMockTest
 protocol TagGetTextFontUseCaseable {
-    // sourcery: theme = "Identical"
-    func execute(theme: any Theme) -> Font
-    // sourcery: theme = "Identical"
-    func executeUI(theme: any Theme) -> UIFont
+    // sourcery: theme = "Identical", return = "Identical"
+    func execute(theme: any Theme) -> any TypographyFontToken
 }
 
 final class TagGetTextFontUseCase: TagGetTextFontUseCaseable {
 
     // MARK: - Methods
 
-    func execute(theme: any Theme) -> Font {
-        return self.execute(theme: theme).font
-    }
-
-    func executeUI(theme: any Theme) -> UIFont {
-        return self.execute(theme: theme).uiFont
-    }
-
-    // MARK: - Methods
-
-    private func execute(theme: any Theme) -> any TypographyFontToken {
+    func execute(theme: any Theme) -> any TypographyFontToken {
         return theme.typography.captionHighlight
     }
 }

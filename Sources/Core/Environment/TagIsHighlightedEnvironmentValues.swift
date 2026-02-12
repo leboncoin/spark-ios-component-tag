@@ -20,7 +20,7 @@ public extension View {
     ///
     /// If the value is *true*, a custom corner radius will be applied.
     ///
-    /// ![Tag rendering with when us highlighted is true.](component_with_is_highlighted.png)
+    /// ![Tag rendering with when us highlighted is true.](tag_with_is_highlighted.png)
     func sparkTagIsHighlighted(_ isHighlighted: Bool) -> some View {
         self.environment(\.tagIsHighlighted, isHighlighted)
     }
