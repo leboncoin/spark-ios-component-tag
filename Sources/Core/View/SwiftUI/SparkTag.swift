@@ -25,12 +25,14 @@ import SparkTheming
 ///     let theme: SparkTheming.Theme = MyTheme()
 ///
 ///     var body: some View {
-///         SparkTag("My tag")
-///         .sparkTheme(self.theme)
+///         SparkTag(
+///             "My tag",
+///             theme: self.theme
+///         )
 ///     }
 /// }     
 /// ```
-/// ![Tag rendering with a localized text.](tag_with_text.png)
+/// ![Tag rendering with a localized text.](component_with_text.png)
 ///
 /// - With a **label**:
 ///
@@ -41,17 +43,19 @@ import SparkTheming
 ///     let theme: SparkTheming.Theme = MyTheme()
 ///
 ///     var body: some View {
-///         SparkTag {
-///             VStack {
-///                 Text("Hello")
-///                 Text("World")
+///         SparkTag(
+///             theme: self.theme,
+///             label: {
+///                 VStack {
+///                     Text("Hello")
+///                     Text("World")
+///                 }
 ///             }
-///         }
-///         .sparkTheme(self.theme)
+///         )
 ///     }
 /// }
 /// ```
-/// ![Tag rendering with a label.](tag_with_label.png)
+/// ![Tag rendering with a label.](component_with_label.png)
 ///
 /// - With an **icon**:
 ///
@@ -63,15 +67,15 @@ import SparkTheming
 ///
 ///     var body: some View {
 ///         SparkTag(
+///             theme: self.theme,
 ///             icon: .init(systemName: "checkmark")
 ///         )
-///         .sparkTheme(self.theme)
 ///         .accessibilityLabel("My Tag")
 ///         .sparkAccessibilityLargeContentText("My Tag")
 ///     }
 /// }
 /// ```
-/// ![Tag rendering with an icon.](tag_with_icon.png)
+/// ![Tag rendering with an icon.](component_with_icon.png)
 ///
 /// - With a **localized string key** or a **string** and an **icon**:
 /// ```swift
@@ -81,13 +85,13 @@ import SparkTheming
 ///     var body: some View {
 ///         SparkTag(
 ///             "My tag",
-///             icon: .init(systemName: "checkmark")
+///             icon: .init(systemName: "checkmark"),
+///             theme: self.theme
 ///         )
-///         .sparkTheme(self.theme)
 ///     }
 /// }
 /// ```
-/// ![Tag rendering with a localized text and icon.](tag_with_text_and_icon.png)
+/// ![Tag rendering with a localized text and icon.](component_with_text_and_icon.png)
 ///
 /// - With a **localized string key** or a **string** and an **icon**:
 /// ```swift
@@ -96,6 +100,7 @@ import SparkTheming
 ///
 ///     var body: some View {
 ///         SparkTag(
+///             theme: self.theme,
 ///             icon: .init(systemName: "checkmark"),
 ///             label: {
 ///                 VStack {
@@ -104,46 +109,55 @@ import SparkTheming
 ///                 }
 ///             }
 ///         )
-///         .sparkTheme(self.theme)
 ///     }
 /// }
 /// ```
-/// ![Tag rendering with a label and icon.](tag_with_label_and_icon.png)
+/// ![Tag rendering with a label and icon.](component_with_label_and_icon.png)
 ///
 /// Some environment values are used by the ``SparkTag``:
 /// - Intent:
 /// ```swift
-/// SparkTag("My tag")
-/// .sparkTheme(self.theme)
+/// SparkTag(
+///     "My tag",
+///     theme: self.theme
+/// )
 /// .sparkTagIntent(.success)
 /// ```
 /// 
 /// - Size:
 /// ```swift
-/// SparkTag("My tag")
-/// .sparkTheme(self.theme)
+/// SparkTag(
+///     "My tag",
+///     theme: self.theme
+/// )
 /// .sparkTagSize(.large)
 /// ```
 ///
 /// - Variant:
 /// ```swift
-/// SparkTag("My tag")
-/// .sparkTheme(self.theme)
+/// SparkTag(
+///     "My tag",
+///     theme: self.theme
+/// )
 /// .sparkTagVariant(.tinted)
 /// ```
 ///
 /// - Is Highlighted:
 /// ```swift
-/// SparkTag("My tag")
-/// .sparkTheme(self.theme)
+/// SparkTag(
+///     "My tag",
+///     theme: self.theme
+/// )
 /// .sparkTagIsHighlighted(true)
 /// ```
-/// ![Tag rendering with when us highlighted is true.](tag_with_is_highlighted.png)
+/// ![Tag rendering with when us highlighted is true.](component_with_is_highlighted.png)
 ///
 /// - Accessibility Large Content Text:
 /// ```swift
-/// SparkTag(icon: .init(systemName: "checkmark"))
-/// .sparkTheme(self.theme)
+/// SparkTag(
+///     theme: self.theme,
+///     icon: .init(systemName: "checkmark")
+/// )
 /// .sparkAccessibilityLargeContentText("The purpose of my tag")
 /// ```
 public struct SparkTag<Label>: View where Label: View {
@@ -154,15 +168,12 @@ public struct SparkTag<Label>: View where Label: View {
 
     // MARK: - Private Properties
 
-    @available(*, deprecated, message: "Remove the deprecated and this property ASAP. (02/01/2026")
-    private var deprecatedTheme: (any Theme)?
-
-    let label: () -> Label
-    let icon: Image?
+    private let theme: any Theme
+    private let label: () -> Label
+    private let icon: Image?
 
     @StateObject private var viewModel = TagViewModel()
 
-    @Environment(\.theme) private var theme
     @Environment(\.tagIntent) private var intent
     @Environment(\.tagSize) private var size
     @Environment(\.tagVariant) private var variant
@@ -176,6 +187,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// - Parameters:
     ///   - textKey: The key for the tag's localized text, that describes
     ///     the purpose of the tag.
+    ///   - theme: The current theme.
     ///
     /// Implementation example :
     /// ```swift
@@ -183,15 +195,19 @@ public struct SparkTag<Label>: View where Label: View {
     ///     let theme: SparkTheming.Theme = MyTheme()
     ///
     ///     var body: some View {
-    ///         SparkTag("My tag")
-    ///             .sparkTheme(self.theme)
+    ///         SparkTag(
+    ///             "My tag",
+    ///             theme: self.theme
+    ///         )
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with a localized text.](tag_with_text.png)
+    /// ![Tag rendering with a localized text.](component_with_text.png)
     public init(
-        _ textKey: LocalizedStringKey
+        _ textKey: LocalizedStringKey,
+        theme: any Theme
     ) where Label == Text {
+        self.theme = theme
         self.label = { Text(textKey) }
         self.icon = nil
     }
@@ -199,8 +215,9 @@ public struct SparkTag<Label>: View where Label: View {
     /// Creates a Spark tag that generates its label from a text.
     ///
     /// - Parameters:
-    ///   - text: The text that describes
+    ///   - textKey: The key for the tag's text, that describes
     ///     the purpose of the tag.
+    ///   - theme: The current theme.
     ///
     /// Implementation example :
     /// ```swift
@@ -208,15 +225,19 @@ public struct SparkTag<Label>: View where Label: View {
     ///     let theme: SparkTheming.Theme = MyTheme()
     ///
     ///     var body: some View {
-    ///         SparkTag("My tag")
-    ///             .sparkTheme(self.theme)
+    ///         SparkTag(
+    ///             "My tag",
+    ///             theme: self.theme
+    ///         )
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with a text.](tag_with_text.png)
+    /// ![Tag rendering with a text.](component_with_text.png)
     public init(
-        _ text: String
+        _ text: String,
+        theme: any Theme
     ) where Label == Text {
+        self.theme = theme
         self.label = { Text(text) }
         self.icon = nil
     }
@@ -224,6 +245,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// Creates a Spark tag that generates its label from a custom label.
     ///
     /// - Parameters:
+    ///   - theme: The current theme.
     ///   - label: A view that describes the purpose of the label.
     ///
     /// Implementation example :
@@ -233,6 +255,7 @@ public struct SparkTag<Label>: View where Label: View {
     ///
     ///     var body: some View {
     ///         SparkTag(
+    ///             theme: self.theme,
     ///             label: {
     ///                 VStack {
     ///                     Text("Hello")
@@ -240,18 +263,18 @@ public struct SparkTag<Label>: View where Label: View {
     ///                 }
     ///             }
     ///         )
-    ///         .sparkTheme(self.theme)
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with a label.](tag_with_label.png)
+    /// ![Tag rendering with a label.](component_with_label.png)
     public init(
+        theme: any Theme,
         @ViewBuilder label: @escaping () -> Label
     ) {
+        self.theme = theme
         self.label = label
         self.icon = nil
     }
-
     // MARK: - Icon Initialization
 
     /// Creates a Spark tag that generates its label from an icon.
@@ -259,6 +282,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// Note : You must provide an *accessibilityLabel* !
     ///
     /// - Parameters:
+    ///   - theme: The current theme.
     ///   - icon: The icon that describe the purpose of the tag.
     ///
     /// Implementation example :
@@ -268,18 +292,20 @@ public struct SparkTag<Label>: View where Label: View {
     ///
     ///     var body: some View {
     ///         SparkTag(
+    ///             theme: self.theme,
     ///             icon: .init(systemName: "checkmark")
     ///         )
-    ///         .sparkTheme(self.theme)
     ///         .accessibilityLabel("My Tag")
     ///         .sparkAccessibilityLargeContentText("My Tag")
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with an icon.](tag_with_icon.png)
+    /// ![Tag rendering with an icon.](component_with_icon.png)
     public init(
+        theme: any Theme,
         icon: Image
     ) where Label == EmptyView {
+        self.theme = theme
         self.label = { EmptyView() }
         self.icon = icon
     }
@@ -292,6 +318,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// - Parameters:
     ///   - textKey: The key for the tag's localized text, that describes
     ///     the purpose of the tag.
+    ///   - theme: The current theme.
     ///   - icon: The icon that describe the purpose of the tag.
     ///
     /// Implementation example :
@@ -302,17 +329,19 @@ public struct SparkTag<Label>: View where Label: View {
     ///     var body: some View {
     ///         SparkTag(
     ///             "My tag",
-    ///             icon: .init(systemName: "checkmark")
+    ///             icon: .init(systemName: "checkmark"),
+    ///             theme: self.theme
     ///         )
-    ///         .sparkTheme(self.theme)
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with a localized text and icon.](tag_with_text_and_icon.png)
+    /// ![Tag rendering with a localized text and icon.](component_with_text_and_icon.png)
     public init(
         _ textKey: LocalizedStringKey,
-        icon: Image
+        icon: Image,
+        theme: any Theme
     ) where Label == Text {
+        self.theme = theme
         self.icon = icon
         self.label = { Text(textKey) }
     }
@@ -320,205 +349,7 @@ public struct SparkTag<Label>: View where Label: View {
     /// Creates a Spark tag that generates its label from a text and an icon.
     ///
     /// - Parameters:
-    ///   - text: The text that describes
-    ///     the purpose of the tag.
-    ///   - icon: The icon that describe the purpose of the tag.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             "My tag",
-    ///             icon: .init(systemName: "checkmark")
-    ///         )
-    ///         .sparkTheme(self.theme)
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with a text and icon.](tag_with_text_and_icon.png)
-    public init(
-        _ text: String,
-        icon: Image
-    ) where Label == Text {
-        self.icon = icon
-        self.label = { Text(text) }
-    }
-
-    /// Creates a Spark tag that generates its label from a custom label and an icon.
-    ///
-    /// - Parameters:
-    ///   - icon: The icon that describe the purpose of the tag.
-    ///   - label: A view that describes the purpose of the label.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             icon: .init(systemName: "checkmark"),
-    ///             label: {
-    ///                 VStack {
-    ///                     Text("Hello")
-    ///                     Text("World")
-    ///                 }
-    ///             }
-    ///         )
-    ///         .sparkTheme(self.theme)
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with a label and icon.](tag_with_label_and_icon.png)
-    public init(
-        icon: Image,
-        @ViewBuilder label: @escaping () -> Label
-    ) {
-        self.icon = icon
-        self.label = label
-    }
-
-    // MARK: - Deprecated Initialization
-
-    /// Creates a Spark tag that generates its label from a localized string key.
-    ///
-    /// - Parameters:
-    ///   - textKey: The key for the tag's localized text, that describes
-    ///     the purpose of the tag.
-    ///   - theme: The current theme.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             "My tag",
-    ///             theme: self.theme
-    ///         )
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with a localized text.](tag_with_text.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
-    public init(
-        _ textKey: LocalizedStringKey,
-        theme: any Theme
-    ) where Label == Text {
-        self.deprecatedTheme = theme
-        self.label = { Text(textKey) }
-        self.icon = nil
-    }
-
-    /// Creates a Spark tag that generates its label from a text.
-    ///
-    /// - Parameters:
-    ///   - text: The text that describes
-    ///     the purpose of the tag.
-    ///   - theme: The current theme.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             "My tag",
-    ///             theme: self.theme
-    ///         )
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with a text.](tag_with_text.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
-    public init(
-        _ text: String,
-        theme: any Theme
-    ) where Label == Text {
-        self.deprecatedTheme = theme
-        self.label = { Text(text) }
-        self.icon = nil
-    }
-
-    /// Creates a Spark tag that generates its label from a custom label.
-    ///
-    /// - Parameters:
-    ///   - theme: The current theme.
-    ///   - label: A view that describes the purpose of the label.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             theme: self.theme,
-    ///             label: {
-    ///                 VStack {
-    ///                     Text("Hello")
-    ///                     Text("World")
-    ///                 }
-    ///             }
-    ///         )
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with a label.](tag_with_label.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
-    public init(
-        theme: any Theme,
-        @ViewBuilder label: @escaping () -> Label
-    ) {
-        self.deprecatedTheme = theme
-        self.label = label
-        self.icon = nil
-    }
-
-    /// Creates a Spark tag that generates its label from an icon.
-    ///
-    /// Note : You must provide an *accessibilityLabel* !
-    ///
-    /// - Parameters:
-    ///   - theme: The current theme.
-    ///   - icon: The icon that describe the purpose of the tag.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             theme: self.theme,
-    ///             icon: .init(systemName: "checkmark")
-    ///         )
-    ///         .accessibilityLabel("My Tag")
-    ///         .sparkAccessibilityLargeContentText("My Tag")
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with an icon.](tag_with_icon.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
-    public init(
-        theme: any Theme,
-        icon: Image
-    ) where Label == EmptyView {
-        self.deprecatedTheme = theme
-        self.label = { EmptyView() }
-        self.icon = icon
-    }
-
-    /// Creates a Spark tag that generates its label from a localized string key
-    /// and an icon.
-    ///
-    /// - Parameters:
-    ///   - textKey: The key for the tag's localized text, that describes
+    ///   - textKey: The key for the tag's text, that describes
     ///     the purpose of the tag.
     ///   - theme: The current theme.
     ///   - icon: The icon that describe the purpose of the tag.
@@ -537,48 +368,13 @@ public struct SparkTag<Label>: View where Label: View {
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with a localized text and icon.](tag_with_text_and_icon.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
-    public init(
-        _ textKey: LocalizedStringKey,
-        icon: Image,
-        theme: any Theme
-    ) where Label == Text {
-        self.deprecatedTheme = theme
-        self.icon = icon
-        self.label = { Text(textKey) }
-    }
-
-    /// Creates a Spark tag that generates its label from a text and an icon.
-    ///
-    /// - Parameters:
-    ///   - text: The text that describes
-    ///     the purpose of the tag.
-    ///   - theme: The current theme.
-    ///   - icon: The icon that describe the purpose of the tag.
-    ///
-    /// Implementation example :
-    /// ```swift
-    /// struct MyView: View {
-    ///     let theme: SparkTheming.Theme = MyTheme()
-    ///
-    ///     var body: some View {
-    ///         SparkTag(
-    ///             "My tag",
-    ///             icon: .init(systemName: "checkmark"),
-    ///             theme: self.theme
-    ///         )
-    ///     }
-    /// ```
-    ///
-    /// ![Tag rendering with a text and icon.](tag_with_text_and_icon.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
+    /// ![Tag rendering with a text and icon.](component_with_text_and_icon.png)
     public init(
         _ text: String,
         icon: Image,
         theme: any Theme
     ) where Label == Text {
-        self.deprecatedTheme = theme
+        self.theme = theme
         self.icon = icon
         self.label = { Text(text) }
     }
@@ -609,14 +405,13 @@ public struct SparkTag<Label>: View where Label: View {
     ///     }
     /// ```
     ///
-    /// ![Tag rendering with a label and icon.](tag_with_label_and_icon.png)
-    @available(*, deprecated, message: "Use the init without theme instead. Set the theme after the init.")
+    /// ![Tag rendering with a label and icon.](component_with_label_and_icon.png)
     public init(
         theme: any Theme,
         icon: Image,
         @ViewBuilder label: @escaping () -> Label
     ) {
-        self.deprecatedTheme = theme
+        self.theme = theme
         self.icon = icon
         self.label = label
     }
@@ -672,14 +467,11 @@ public struct SparkTag<Label>: View where Label: View {
         .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .onAppear() {
             self.viewModel.setup(
-                theme: self.deprecatedTheme ?? self.theme.value,
+                theme: self.theme,
                 intent: self.intent,
                 size: self.size,
                 variant: self.variant
             )
-        }
-        .onChange(of: self.theme) { theme in
-            self.viewModel.theme = theme.value
         }
         .onChange(of: self.intent) { intent in
             self.viewModel.intent = intent

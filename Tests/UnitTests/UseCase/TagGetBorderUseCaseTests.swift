@@ -17,29 +17,75 @@ final class TagGetBorderUseCaseTests: XCTestCase {
     private var useCase = TagGetBorderUseCase()
     private var theme = ThemeGeneratedMock.mocked()
 
-    // MARK: - Tests
+    // MARK: - Filled Variant Tests
 
-    func test_execute_with_medium_size() {
-        // GIVEN / WHEN
+    func test_execute_with_medium_size_filled_variant() {
         let border = self.useCase.execute(
             theme: self.theme,
-            size: .medium
+            size: .medium,
+            variant: .filled
         )
 
-        // THEN
         XCTAssertEqual(border.width, self.theme.border.width.small)
-        XCTAssertEqual(border.radius, self.theme.border.radius.small)
+        XCTAssertEqual(border.radius, self.theme.border.radius.full)
     }
 
-    func test_execute_with_large_size() {
-        // GIVEN / WHEN
+    func test_execute_with_large_size_filled_variant() {
         let border = self.useCase.execute(
             theme: self.theme,
-            size: .large
+            size: .large,
+            variant: .filled
         )
 
-        // THEN
         XCTAssertEqual(border.width, self.theme.border.width.small)
-        XCTAssertEqual(border.radius, self.theme.border.radius.small)
+        XCTAssertEqual(border.radius, self.theme.border.radius.medium)
+    }
+
+    // MARK: - Outlined Variant Tests
+
+    func test_execute_with_medium_size_outlined_variant() {
+        let border = self.useCase.execute(
+            theme: self.theme,
+            size: .medium,
+            variant: .outlined
+        )
+
+        XCTAssertEqual(border.width, self.theme.border.width.small)
+        XCTAssertEqual(border.radius, self.theme.border.radius.full)
+    }
+
+    func test_execute_with_large_size_outlined_variant() {
+        let border = self.useCase.execute(
+            theme: self.theme,
+            size: .large,
+            variant: .outlined
+        )
+
+        XCTAssertEqual(border.width, self.theme.border.width.small)
+        XCTAssertEqual(border.radius, self.theme.border.radius.medium)
+    }
+
+    // MARK: - Tinted Variant Tests
+
+    func test_execute_with_medium_size_tinted_variant() {
+        let border = self.useCase.execute(
+            theme: self.theme,
+            size: .medium,
+            variant: .tinted
+        )
+
+        XCTAssertEqual(border.width, self.theme.border.width.small)
+        XCTAssertEqual(border.radius, self.theme.border.radius.full)
+    }
+
+    func test_execute_with_large_size_tinted_variant() {
+        let border = self.useCase.execute(
+            theme: self.theme,
+            size: .large,
+            variant: .tinted
+        )
+
+        XCTAssertEqual(border.width, self.theme.border.width.small)
+        XCTAssertEqual(border.radius, self.theme.border.radius.medium)
     }
 }

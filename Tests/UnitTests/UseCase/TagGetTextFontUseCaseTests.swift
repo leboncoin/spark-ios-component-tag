@@ -9,14 +9,25 @@
 import XCTest
 import SwiftUI
 @testable import SparkComponentTag
-@_spi(SI_SPI) import SparkTheming
 @_spi(SI_SPI) import SparkThemingTesting
 
 final class TagGetTextFontUseCaseTests: XCTestCase {
 
     // MARK: - Tests
 
-    func test_execute_returnsTypographyFontTokenFromTheme() {
+    func test_executeUI_returnsUIFontFromTheme() {
+        // GIVEN
+        let theme = ThemeGeneratedMock.mocked()
+        let useCase = TagGetTextFontUseCase()
+
+        // WHEN
+        let result = useCase.executeUI(theme: theme)
+
+        // THEN
+        XCTAssertEqual(result, theme.typography.captionHighlight.uiFont)
+    }
+
+    func test_execute_returnsFontFromTheme() {
         // GIVEN
         let theme = ThemeGeneratedMock.mocked()
         let useCase = TagGetTextFontUseCase()
@@ -25,6 +36,6 @@ final class TagGetTextFontUseCaseTests: XCTestCase {
         let result = useCase.execute(theme: theme)
 
         // THEN
-        XCTAssertTrue(result.equals(theme.typography.captionHighlight))
+        XCTAssertEqual(result, theme.typography.captionHighlight.font)
     }
 }
