@@ -18,16 +18,16 @@ Users can’t interact with Tag except for accessibility.
 ### Rendering
 
 - Text :
-![Tag rendering with a text.](component_with_text.png)
+![Tag rendering with a text.](tag_with_text.png)
 
 - Text + Icon :
-![Tag rendering with a text and an icon.](component_with_text_and_icon.png)
+![Tag rendering with a text and an icon.](tag_with_text_and_icon.png)
 
 - Icon : 
-![Tag rendering with an icon.](component_with_icon.png)
+![Tag rendering with an icon.](tag_with_icon.png)
 
 - Is highlighted : 
-![Tag rendering with when us highlighted is true.](component_with_is_highlighted.png)
+![Tag rendering with when us highlighted is true.](tag_with_is_highlighted.png)
 
 ## A11y
 
