@@ -18,25 +18,21 @@ struct TagConfigurationSnapshotTests {
 
     let scenario: TagScenarioSnapshotTests
 
-    var intent: TagIntent = .default
-    var size: TagSize = .default
-    var variant: TagVariant = .default
-    var isHighlighted: Bool = false
-    var content: TagContentResilience = .default
-    var isIcon: Bool = true
+    let intent: TagIntent
+    let size: TagSize
+    let variant: TagVariant
+    let isHighlighted: Bool
+    let content: TagContentResilience
+    let isIcon: Bool
     var width: CGFloat? {
         return self.content == .longLabel ? 100 : nil
     }
-    var modes: [ComponentSnapshotTestMode] = ComponentSnapshotTestConstants.Modes.default
-    var sizes: [UIContentSizeCategory] = ComponentSnapshotTestConstants.Sizes.default
+    let modes: [ComponentSnapshotTestMode]
+    let sizes: [UIContentSizeCategory]
 
     // MARK: - Getter
 
-    var name: String {
-        guard self.documentationName == nil else {
-            return ""
-        }
-
+    func testName() -> String {
         return [
             "\(self.scenario.rawValue)",
             "\(self.intent)",
@@ -49,16 +45,6 @@ struct TagConfigurationSnapshotTests {
             .compactMap { $0 }
             .joined(separator: "-")
     }
-
-    var testName: String {
-        return if let documentationName {
-            "tag_" + documentationName
-        } else {
-            self.scenario.rawValue
-        }
-    }
-
-    var documentationName: String?
 }
 
 // MARK: - Enum
@@ -68,8 +54,6 @@ enum TagContentResilience: String, CaseIterable {
     case label
     case longLabel
     case other
-
-    static var `default` = Self.label
 
     var text: String? {
         switch self {

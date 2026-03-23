@@ -15,7 +15,8 @@ protocol TagGetBorderUseCaseable {
     // sourcery: theme = "Identical"
     func execute(
         theme: any Theme,
-        size: TagSize
+        size: TagSize,
+        variant: TagVariant
     ) -> TagBorder
 }
 
@@ -25,12 +26,17 @@ final class TagGetBorderUseCase: TagGetBorderUseCaseable {
 
     func execute(
         theme: any Theme,
-        size: TagSize
+        size: TagSize,
+        variant: TagVariant
     ) -> TagBorder {
         let border = theme.border
 
         let width = border.width.small
-        let radius = border.radius.small
+
+        let radius = switch size {
+        case .medium: border.radius.full
+        case .large: border.radius.medium
+        }
 
         return .init(width: width, radius: radius)
     }

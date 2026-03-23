@@ -8,11 +8,10 @@
 
 import SwiftUI
 @_spi(SI_SPI) import SparkCommon
-@_spi(SI_SPI) import SparkTheming
+import SparkTheming
 
 /// ViewModel only used by **SwiftUI** View.
 // sourcery: AutoPublisherTest, AutoViewModelStub
-// sourcery: textFont = "Identical"
 final internal class TagViewModel: ObservableObject {
 
     // MARK: - Published Properties
@@ -20,14 +19,16 @@ final internal class TagViewModel: ObservableObject {
     @Published private(set) var border = TagBorder()
     @Published private(set) var colors = TagColors()
     @Published private(set) var spacings = TagSpacings()
-    @Published private(set) var height: CGFloat = .zero
-    @Published private(set) var textFont: any TypographyFontToken = TypographyFontTokenClear()
+    @Published private(set) var height: CGFloat?
+    @Published private(set) var textFont: Font = .body
 
     // MARK: - Properties
 
+    private var alreadyUpdateAll = false
+
     var theme: (any Theme)? {
         didSet {
-            guard !oldValue.equals(self.theme), self.alreadyUpdateAll else { return }
+            guard self.alreadyUpdateAll else { return }
 
             self.setBorder()
             self.setColors()
@@ -57,13 +58,10 @@ final internal class TagViewModel: ObservableObject {
         didSet {
             guard oldValue != self.variant, self.alreadyUpdateAll else { return }
 
+            self.setBorder()
             self.setColors()
         }
     }
-
-    // MARK: - Private Properties
-
-    private var alreadyUpdateAll = false
 
     // MARK: - Use Case Properties
 
@@ -114,13 +112,14 @@ final internal class TagViewModel: ObservableObject {
     // MARK: - Private Setter
 
     private func setBorder() {
-        guard let theme, let size else {
+        guard let theme, let size, let variant else {
             return
         }
 
         self.border = self.getBorderUseCase.execute(
             theme: theme,
-            size: size
+            size: size,
+            variant: variant
         )
     }
 
