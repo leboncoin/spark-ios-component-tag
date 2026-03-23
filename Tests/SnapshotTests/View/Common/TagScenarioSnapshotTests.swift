@@ -185,7 +185,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
     /// Description: To test content resilience
     ///
     /// Content:
-    ///  - intent: basic
+    ///  - intent: support
     ///  - size: medium
     ///  - variant: tinted
     ///  - isHighlighted: false
@@ -204,7 +204,7 @@ enum TagScenarioSnapshotTests: String, CaseIterable {
 
                 return .init(
                     scenario: self,
-                    intent: .basic,
+                    intent: .support,
                     size: .medium,
                     variant: .tinted,
                     isHighlighted: false,

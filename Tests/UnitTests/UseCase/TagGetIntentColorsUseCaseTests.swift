@@ -212,26 +212,4 @@ final class  TagGetContentColorsUseCaseTests: XCTestCase {
             )
         )
     }
-
-    func test_execute_intent_basic() {
-        // GIVEN
-        let intent = TagIntent.basic
-        let useCase = TagGetContentColorsUseCase()
-        let colors = ColorsGeneratedMock.mocked()
-
-        // WHEN
-        let sut = useCase.execute(intent: intent,
-                                  colors: colors)
-
-        // THEN
-        XCTAssertEqual(
-            sut,
-            .init(
-                color: colors.basic.basic,
-                onColor: colors.basic.onBasic,
-                containerColor: colors.basic.basicContainer,
-                onContainerColor: colors.basic.onBasicContainer
-            )
-        )
-    }
 }
